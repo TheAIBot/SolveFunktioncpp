@@ -4,132 +4,127 @@
 
 
 template<typename T, int32_t N>
-void calculatePlus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta)
+void calculatePlus(T(&results)[N], const T randomNumber)
 {
-	switch (meta)
+	for (int32_t i = 0; i < N; i++)
 	{
-	case 0:
-	case 1:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] +=  randomNumber;
-		}
-		break;
-	case 2:
-	case 3:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] += parameters[i];
-		}
-		break;
+		results[i] += randomNumber;
+	}
+}
+template<typename T, int32_t N>
+void calculatePlus(const T(&parameters)[N], T(&results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] += parameters[i];
 	}
 }
 
 template<typename T, int32_t N>
-void calculateMinus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta)
+void calculateMinus(T(&results)[N], const T randomNumber)
 {
-	switch (meta)
+	for (int32_t i = 0; i < N; i++)
 	{
-	case 0:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] = randomNumber - results[i];
-		}
-		break;
-	case 1:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] -= randomNumber;
-		}
-		break;
-	case 2:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] = parameters[i] - results[i];
-		}
-		break;
-	case 3:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] -= parameters[i];
-		}
-		break;
+		results[i] = randomNumber - results[i];
+	}
+}
+template<typename T, int32_t N>
+void calculateMinusReversed(T(&results)[N], const T randomNumber)
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] -= randomNumber;
+	}
+}
+template<typename T, int32_t N>
+void calculateMinus(const T(&parameters)[N], T(&results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] = parameters[i] - results[i];
+	}
+}
+template<typename T, int32_t N>
+void calculateMinusReversed(const T(&parameters)[N], T(&results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] -= parameters[i];
 	}
 }
 
 template<typename T, int32_t N>
-void calculateMultiply(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta)
+void calculateMultiply(T(&results)[N], const T randomNumber)
 {
-	switch (meta)
+	for (int32_t i = 0; i < N; i++)
 	{
-	case 0:
-	case 1:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] *= randomNumber;
-		}
-		break;
-	case 2:
-	case 3:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] *= parameters[i];
-		}
-		break;
+		results[i] *= randomNumber;
+	}
+}
+template<typename T, int32_t N>
+void calculateMultiply(const T(&parameters)[N], T(&results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] *= parameters[i];
 	}
 }
 
 template<typename T, int32_t N>
-bool calculateDivide(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta)
+bool calculateDivide(T(&results)[N], const T randomNumber)
 {
-	switch (meta)
+	//make sure to not divide by 0
+	for (int32_t i = 0; i < N; i++)
 	{
-	case 0:
-		//make sure to not divide by 0
-		for (int32_t i = 0; i < N; i++)
-		{
-			if (results[i] == 0)
-			{
-				return false;
-			}
-		}
-
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] = randomNumber / results[i];
-		}
-		break;
-	case 1:
-		if (randomNumber == 0)
+		if (results[i] == 0)
 		{
 			return false;
 		}
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] /= randomNumber;
-		}
-		break;
-	case 2:
-		//make sure to not divide by 0
-		for (int32_t i = 0; i < N; i++)
-		{
-			if (results[i] == 0)
-			{
-				return false;
-			}
-		}
+	}
 
-		for (int32_t i = 0; i < N; i++)
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] = randomNumber / results[i];
+	}
+	return true;
+}
+template<typename T, int32_t N>
+bool calculateDivideReversed(T(&results)[N], const T randomNumber)
+{
+	if (randomNumber == 0)
+	{
+		return false;
+	}
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] /= randomNumber;
+	}
+	return true;
+}
+template<typename T, int32_t N>
+bool calculateDivide(const T(&parameters)[N], T(&results)[N])
+{
+	//make sure to not divide by 0
+	for (int32_t i = 0; i < N; i++)
+	{
+		if (results[i] == 0)
 		{
-			results[i] = parameters[i] / results[i];
+			return false;
 		}
-		break;
-	case 3:
-		for (int32_t i = 0; i < N; i++)
-		{
-			results[i] /= parameters[i];
-		}
-		break;
+	}
+
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] = parameters[i] / results[i];
+	}
+	return true;
+}
+template<typename T, int32_t N>
+bool calculateDivideReversed(const T(&parameters)[N], T(&results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] /= parameters[i];
 	}
 	return true;
 }

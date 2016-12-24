@@ -3,33 +3,33 @@
 
 enum MathOperator
 {
-	PLUS,
-	MINUS,
-	MULTIPLY,
-	DIVIDE,
-	POW,
-	ROOT,
-	EXP,
-	NLOG,
-	LOG,
-	MOD,
-	FLOOR,
-	CEIL,
-	ROUND,
-	SIN,
-	COS,
-	TAN,
-	ASIN,
-	ACOS,
-	ATAN,
-	ABS,
-	AND,
-	NAND,
-	OR,
-	NOR,
-	XOR,
-	XNOR,
-	NOT
+	PLUS = 0,
+	MINUS = 1,
+	MULTIPLY = 2,
+	DIVIDE = 3,
+	POW = 4,
+	ROOT = 5,
+	EXP = 6,
+	NLOG = 7,
+	LOG = 8,
+	MOD = 9,
+	FLOOR = 10,
+	CEIL = 11,
+	ROUND = 12,
+	SIN = 13,
+	COS = 14,
+	TAN = 15,
+	ASIN = 16,
+	ACOS = 17,
+	ATAN = 18,
+	ABS = 19,
+	AND = 20,
+	NAND = 21,
+	OR = 22,
+	NOR = 23,
+	XOR = 24,
+	XNOR = 25,
+	NOT = 26
 };
 
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
@@ -112,99 +112,46 @@ public:
 		{
 			const int32_t parameterIndex = getParameterIndex(operatorIndex);
 			const uint8_t meta = getMeta(operatorIndex);
-
-			switch (operatorType[operatorIndex])
+			const int32_t operatorNumber = static_cast<int32_t>(operatorType[operatorIndex]);
+			const int32_t operatorVersionIndex = operatorNumber * 4 + meta;
+			switch (operatorVersionIndex)
 			{
-			case PLUS:
-				calculatePlus(parameters[parameterIndex], results, randomNumber[operatorIndex], meta);
-				break;
-			case MINUS:
-				calculateMinus(parameters[parameterIndex], results, randomNumber[operatorIndex], meta);
-				break;
-			case MULTIPLY:
-				calculateMultiply(parameters[parameterIndex], results, randomNumber[operatorIndex], meta);
-				break;
-			/*
-			case POW:
-				calculatePow(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case ROOT:
-				calculateRoot(results);
-				break;
-			case EXP:
-				calculateExp(results);
-				break;
-			case NLOG:
-				calculateNLog(results);
-				break;
-			case LOG:
-				calculateLog(results);
-				break;
-			case MOD:
-				calculateMod(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case FLOOR:
-				calculateFloor(results);
-				break;
-			case CEIL:
-				calculateCeil(results);
-				break;
-			case ROUND:
-				calculateRound(results);
-				break;
-			case SIN:
-				calculateSin(results);
-				break;
-			case COS:
-				calculateCos(results);
-				break;
-			case TAN:
-				calculateTan(results);
-				break;
-			case ASIN:
-				calculateASin(results);
-				break;
-			case ACOS:
-				calculateACos(results);
-				break;
-			case ATAN:
-				calculateATan(results);
-				break;
-			case ABS:
-				calculateAbs(results);
-				break;
-			case AND:
-				calculateAND(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case NAND:
-				calculateNAND(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case OR:
-				calculateOR(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case NOR:
-				calculateNOR(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case XOR:
-				calculateXOR(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case XNOR:
-				calculateXNOR(parameters[parameterIndex], results, randomNumber[operatorIndex], getUseRandomNumber(operatorIndex), getResultOnRightSide(operatorIndex));
-				break;
-			case NOT:
-				calculateNot(results);
-				break;
-			*/
-			case DIVIDE:
-				const bool divideSuccess = calculateDivide<T, R_SIZE>(parameters[parameterIndex], results, randomNumber[operatorIndex], meta);
-				if (divideSuccess == false)
+			case 0:
+			case 1:
+				calculatePlus(results, randomNumber[operatorIndex]);
+			case 2:
+			case 3:
+				calculatePlus(parameters[parameterIndex], results);
+
+			case 4:
+				calculateMinus(results, randomNumber[operatorIndex]);
+			case 5:
+				calculateMinusReversed(results, randomNumber[operatorIndex]);
+			case 6:
+				calculateMinus(parameters[parameterIndex], results);
+			case 7:
+				calculateMinusReversed(parameters[parameterIndex], results);
+
+			case 8:
+			case 9:
+				calculateMultiply(results, randomNumber[operatorIndex]);
+			case 10:
+			case 11:
+				calculateMultiply(parameters[parameterIndex], results);
+
+			case 12:
+				bool success = calculateDivide(results, randomNumber[operatorIndex]);
+				if (!success)
 				{
-					//random value until function faliure is implemented
 					offset = 1000000;
-					failedCalculations++;
 					return;
 				}
-				break;
+			case 13:
+				calculateDivideReversed(results, randomNumber[operatorIndex]);
+			case 14:
+				calculateDivide(parameters[parameterIndex], results);
+			case 15:
+				calculateDivideReversed(parameters[parameterIndex], results);
 			}
 						
 			operatorIndex = nextOperatorIndex[operatorIndex];
