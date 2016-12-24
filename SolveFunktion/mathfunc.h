@@ -114,44 +114,73 @@ public:
 			const uint8_t meta = getMeta(operatorIndex);
 			const int32_t operatorNumber = static_cast<int32_t>(operatorType[operatorIndex]);
 			const int32_t operatorVersionIndex = operatorNumber * 4 + meta;
+			bool success = true;
 			switch (operatorVersionIndex)
 			{
 			case 0:
 			case 1:
 				calculatePlus(results, randomNumber[operatorIndex]);
+				break;
 			case 2:
 			case 3:
 				calculatePlus(parameters[parameterIndex], results);
-
+				break;
 			case 4:
 				calculateMinus(results, randomNumber[operatorIndex]);
+				break;
 			case 5:
 				calculateMinusReversed(results, randomNumber[operatorIndex]);
+				break;
 			case 6:
 				calculateMinus(parameters[parameterIndex], results);
+				break;
 			case 7:
 				calculateMinusReversed(parameters[parameterIndex], results);
-
+				break;
 			case 8:
 			case 9:
 				calculateMultiply(results, randomNumber[operatorIndex]);
+				break;
 			case 10:
 			case 11:
 				calculateMultiply(parameters[parameterIndex], results);
-
+				break;
 			case 12:
-				bool success = calculateDivide(results, randomNumber[operatorIndex]);
+				success = calculateDivide(results, randomNumber[operatorIndex]);
 				if (!success)
 				{
 					offset = 1000000;
+					failedCalculations++;
 					return;
 				}
+				break;
 			case 13:
-				calculateDivideReversed(results, randomNumber[operatorIndex]);
+				success = calculateDivideReversed(results, randomNumber[operatorIndex]);
+				if (!success)
+				{
+					offset = 1000000;
+					failedCalculations++;
+					return;
+				}
+				break;
 			case 14:
-				calculateDivide(parameters[parameterIndex], results);
+				success = calculateDivide(parameters[parameterIndex], results);
+				if (!success)
+				{
+					offset = 1000000;
+					failedCalculations++;
+					return;
+				}
+				break;
 			case 15:
-				calculateDivideReversed(parameters[parameterIndex], results);
+				success = calculateDivideReversed(parameters[parameterIndex], results);
+				if (!success)
+				{
+					offset = 1000000;
+					failedCalculations++;
+					return;
+				}
+				break;
 			}
 						
 			operatorIndex = nextOperatorIndex[operatorIndex];

@@ -4,7 +4,7 @@
 
 
 template<typename T, int32_t N>
-void calculatePlus(T(&results)[N], const T randomNumber)
+inline void calculatePlus(T(&results)[N], const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -12,7 +12,7 @@ void calculatePlus(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-void calculatePlus(const T(&parameters)[N], T(&results)[N])
+inline void calculatePlus(const T(&parameters)[N], T(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -21,7 +21,7 @@ void calculatePlus(const T(&parameters)[N], T(&results)[N])
 }
 
 template<typename T, int32_t N>
-void calculateMinus(T(&results)[N], const T randomNumber)
+inline void calculateMinus(T(&results)[N], const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -29,7 +29,7 @@ void calculateMinus(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-void calculateMinusReversed(T(&results)[N], const T randomNumber)
+inline void calculateMinusReversed(T(&results)[N], const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -37,7 +37,7 @@ void calculateMinusReversed(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-void calculateMinus(const T(&parameters)[N], T(&results)[N])
+inline void calculateMinus(const T(&parameters)[N], T(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -45,7 +45,7 @@ void calculateMinus(const T(&parameters)[N], T(&results)[N])
 	}
 }
 template<typename T, int32_t N>
-void calculateMinusReversed(const T(&parameters)[N], T(&results)[N])
+inline void calculateMinusReversed(const T(&parameters)[N], T(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -54,7 +54,7 @@ void calculateMinusReversed(const T(&parameters)[N], T(&results)[N])
 }
 
 template<typename T, int32_t N>
-void calculateMultiply(T(&results)[N], const T randomNumber)
+inline void calculateMultiply(T(&results)[N], const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -62,7 +62,7 @@ void calculateMultiply(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-void calculateMultiply(const T(&parameters)[N], T(&results)[N])
+inline void calculateMultiply(const T(&parameters)[N], T(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -71,7 +71,7 @@ void calculateMultiply(const T(&parameters)[N], T(&results)[N])
 }
 
 template<typename T, int32_t N>
-bool calculateDivide(T(&results)[N], const T randomNumber)
+inline bool calculateDivide(T(&results)[N], const T randomNumber)
 {
 	//make sure to not divide by 0
 	for (int32_t i = 0; i < N; i++)
@@ -89,7 +89,7 @@ bool calculateDivide(T(&results)[N], const T randomNumber)
 	return true;
 }
 template<typename T, int32_t N>
-bool calculateDivideReversed(T(&results)[N], const T randomNumber)
+inline bool calculateDivideReversed(T(&results)[N], const T randomNumber)
 {
 	if (randomNumber == 0)
 	{
@@ -102,7 +102,7 @@ bool calculateDivideReversed(T(&results)[N], const T randomNumber)
 	return true;
 }
 template<typename T, int32_t N>
-bool calculateDivide(const T(&parameters)[N], T(&results)[N])
+inline bool calculateDivide(const T(&parameters)[N], T(&results)[N])
 {
 	//make sure to not divide by 0
 	for (int32_t i = 0; i < N; i++)
@@ -120,7 +120,7 @@ bool calculateDivide(const T(&parameters)[N], T(&results)[N])
 	return true;
 }
 template<typename T, int32_t N>
-bool calculateDivideReversed(const T(&parameters)[N], T(&results)[N])
+inline bool calculateDivideReversed(const T(&parameters)[N], T(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
