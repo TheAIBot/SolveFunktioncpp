@@ -1,16 +1,16 @@
 #pragma once
 
 template<typename T, int32_t N>
-void calculatePlus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber);
+void calculatePlus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta);
 
 template<typename T, int32_t N>
-void calculateMinus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight);
+void calculateMinus(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta);
 
 template<typename T, int32_t N>
-void calculateMultiply(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber);
+void calculateMultiply(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta);
 
 template<typename T, int32_t N>
-bool calculateDivide(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight);
+bool calculateDivide(const T(&parameters)[N], T(&results)[N], const T randomNumber, const uint8_t meta);
 
 template<typename T, int32_t N>
 void calculatePow(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight);

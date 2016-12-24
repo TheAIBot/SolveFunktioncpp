@@ -56,13 +56,15 @@ public:
 	float offset;
 	static std::atomic_int32_t failedCalculations;
 
-	MathFunction(const MathOperator (&allowedOps)[O_SIZE])
+	MathFunction(const MathOperator (&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber)
 	{
 		tcRandom = getTCRandom();
 		for (uint32_t i = 0; i < O_SIZE; i++)
 		{
 			allowedOperators[i] = allowedOps[i];
 		}
+		minRandomNumber = minNumber;
+		maxRandomNumber = maxNumber;
 	}
 
 	void randomize()
@@ -74,7 +76,7 @@ public:
 		}
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			randomNumber[i] = static_cast<T>(randomRange(-10, 10, tcRandom));
+			randomNumber[i] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		}
 		memset(&metaData, 0, F_SIZE * sizeof(uint8_t));
 		for (int32_t i = 0; i < functionLength; i++)
@@ -250,11 +252,12 @@ public:
 		copyInto.startOperatorIndex = startOperatorIndex;
 	}
 
-	void evolve(const uint32_t maxEvolve)
+	void evolve(const int32_t maxEvolve)
 	{
-		for (uint32_t i = 0; i < maxEvolve; i++)
+		const int32_t evolveCount = randomRange(1, maxEvolve, tcRandom);
+		for (int32_t i = 0; i < evolveCount; i++)
 		{
-			switch (randomRange(0, 2, tcRandom))
+			switch (randomRange(0, 3, tcRandom))
 			{
 			case 0:
 				if (canRemoveOperator())
@@ -271,6 +274,8 @@ public:
 					addOperator();
 				}
 				break;
+			case 3:
+				changeOperatorNumber();
 			}
 		}
 	}
@@ -280,11 +285,12 @@ private:
 	MathOperator operatorType[F_SIZE];
 	T randomNumber[F_SIZE];
 	uint8_t metaData[F_SIZE];
-
 	int8_t nextOperatorIndex[F_SIZE];
 	struct TCRandom tcRandom;
 	uint32_t operatorCount = 0;
 	uint32_t startOperatorIndex = 0;
+	int32_t minRandomNumber;
+	int32_t maxRandomNumber;
 
 	inline uint8_t getMeta(const int32_t index)
 	{
@@ -402,9 +408,15 @@ private:
 	void randomizeOperator(int index)
 	{
 		operatorType[index] = getRandomMathOperator();
-		randomNumber[index] = static_cast<T>(randomRange(-10, 10, tcRandom));
+		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		setMeta(index, randomRange(0, 3, tcRandom));
 		setParameterIndex(index, randomRange(0, P_SIZE - 1, tcRandom));
+	}
+
+	void changeOperatorNumber()
+	{
+		int32_t index = getRandomOperatorIndex();
+		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 	}
 };
 

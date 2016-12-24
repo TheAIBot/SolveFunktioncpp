@@ -12,14 +12,14 @@ void calculatePlus(const T(&parameters)[N], T(&results)[N], const T randomNumber
 	case 1:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] + randomNumber;
+			results[i] +=  randomNumber;
 		}
 		break;
 	case 2:
 	case 3:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] + parameters[i];
+			results[i] += parameters[i];
 		}
 		break;
 	}
@@ -39,7 +39,7 @@ void calculateMinus(const T(&parameters)[N], T(&results)[N], const T randomNumbe
 	case 1:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] - randomNumber;
+			results[i] -= randomNumber;
 		}
 		break;
 	case 2:
@@ -51,7 +51,7 @@ void calculateMinus(const T(&parameters)[N], T(&results)[N], const T randomNumbe
 	case 3:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] - parameters[i];
+			results[i] -= parameters[i];
 		}
 		break;
 	}
@@ -66,14 +66,14 @@ void calculateMultiply(const T(&parameters)[N], T(&results)[N], const T randomNu
 	case 1:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] * randomNumber;
+			results[i] *= randomNumber;
 		}
 		break;
 	case 2:
 	case 3:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] * parameters[i];
+			results[i] *= parameters[i];
 		}
 		break;
 	}
@@ -106,7 +106,7 @@ bool calculateDivide(const T(&parameters)[N], T(&results)[N], const T randomNumb
 		}
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] / randomNumber;
+			results[i] /= randomNumber;
 		}
 		break;
 	case 2:
@@ -127,7 +127,7 @@ bool calculateDivide(const T(&parameters)[N], T(&results)[N], const T randomNumb
 	case 3:
 		for (int32_t i = 0; i < N; i++)
 		{
-			results[i] = results[i] / parameters[i];
+			results[i] /= parameters[i];
 		}
 		break;
 	}
