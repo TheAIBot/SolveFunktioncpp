@@ -12,7 +12,7 @@ inline void calculatePlus(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculatePlus(const T(&parameters)[N], T(&results)[N])
+inline void calculatePlus(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -37,7 +37,7 @@ inline void calculateMinusReversed(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMinus(const T(&parameters)[N], T(&results)[N])
+inline void calculateMinus(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -45,7 +45,7 @@ inline void calculateMinus(const T(&parameters)[N], T(&results)[N])
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMinusReversed(const T(&parameters)[N], T(&results)[N])
+inline void calculateMinusReversed(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -62,7 +62,7 @@ inline void calculateMultiply(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMultiply(const T(&parameters)[N], T(&results)[N])
+inline void calculateMultiply(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -102,7 +102,7 @@ inline bool calculateDivideReversed(T(&results)[N], const T randomNumber)
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivide(const T(&parameters)[N], T(&results)[N])
+inline bool calculateDivide(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	//make sure to not divide by 0
 	for (int32_t i = 0; i < N; i++)
@@ -120,7 +120,7 @@ inline bool calculateDivide(const T(&parameters)[N], T(&results)[N])
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivideReversed(const T(&parameters)[N], T(&results)[N])
+inline bool calculateDivideReversed(const T(& __restrict parameters)[N], T(& __restrict results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{

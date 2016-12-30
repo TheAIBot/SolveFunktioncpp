@@ -195,9 +195,9 @@ public:
 
 	void makeCopy(MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> &copyInto)
 	{
-		memcpy(&copyInto.operatorType, &operatorType, F_SIZE * sizeof(MathOperator));
-		memcpy(&copyInto.randomNumber, &randomNumber, F_SIZE * sizeof(T));
-		memcpy(&copyInto.metaData, &metaData, F_SIZE * sizeof(uint8_t));
+		memcpy(&copyInto.operatorType,		&operatorType,		F_SIZE * sizeof(MathOperator));
+		memcpy(&copyInto.randomNumber,		&randomNumber,		F_SIZE * sizeof(T));
+		memcpy(&copyInto.metaData,			&metaData,			F_SIZE * sizeof(uint8_t));
 		memcpy(&copyInto.nextOperatorIndex, &nextOperatorIndex, F_SIZE * sizeof(int8_t));
 
 		copyInto.offset = offset;
@@ -207,8 +207,8 @@ public:
 
 	void makeSortedCopy(MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> &copyInto)
 	{
-		int index = startOperatorIndex;
-		for (uint32_t copyInsertionIndex = 0; index != END_OPERATOR; copyInsertionIndex++)
+		uint32_t index = startOperatorIndex;
+		for (uint32_t copyInsertionIndex = 0; copyInsertionIndex < operatorCount; copyInsertionIndex++)
 		{
 			copyInto.operatorType[copyInsertionIndex] = operatorType[index];
 			copyInto.randomNumber[copyInsertionIndex] = randomNumber[index];
@@ -231,27 +231,45 @@ public:
 	void evolve(const int32_t maxEvolve)
 	{
 		const int32_t evolveCount = randomRange(1, maxEvolve, tcRandom);
-		for (int32_t i = 0; i < evolveCount; i++)
+		if (randomBool(tcRandom))
 		{
-			switch (randomRange(0, 3, tcRandom))
+			for (int32_t i = 0; i < evolveCount; i++)
 			{
-			case 0:
-				if (canRemoveOperator())
+				switch (randomRange(0, 2, tcRandom))
 				{
-					removeOperator();
+				case 0:
+					if (canRemoveOperator())
+					{
+						removeOperator();
+					}
+					break;
+				case 1:
+					changeOperator();
+					break;
+				case 2:
+					if (canAddOperator())
+					{
+						addOperator();
+					}
+					break;
 				}
-				break;
-			case 1:
-				changeOperator();
-				break;
-			case 2:
-				if (canAddOperator())
+			}
+		}
+		else
+		{
+			if (randomBool(tcRandom))
+			{
+				for (int32_t i = 0; i < evolveCount; i++)
 				{
-					addOperator();
+					changeOperatorNumber();
 				}
-				break;
-			case 3:
-				changeOperatorNumber();
+			}
+			else
+			{
+				for (int32_t i = 0; i < evolveCount; i++)
+				{
+					incrementChangeOperatorNumber();
+				}
 			}
 		}
 	}
@@ -393,6 +411,12 @@ private:
 	{
 		int32_t index = getRandomOperatorIndex();
 		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
+	}
+
+	void incrementChangeOperatorNumber()
+	{
+		int32_t index = getRandomOperatorIndex();
+		randomNumber[index] += (randomBool(tcRandom)) ? 1 : -1;
 	}
 };
 

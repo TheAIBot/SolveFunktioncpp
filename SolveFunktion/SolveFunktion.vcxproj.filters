@@ -36,6 +36,9 @@
     <ClInclude Include="arrAvg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cacheAlignedTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
