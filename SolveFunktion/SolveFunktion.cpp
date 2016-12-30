@@ -30,7 +30,7 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 4
-#define NUMBER_OF_THREADS 6
+#define NUMBER_OF_THREADS 4
 #define MAX_RANDOM_NUMBER -101
 #define MIN_RANDOM_NUMBER  101
 #define STUCK_COUNT_FOR_RESET 1000000
@@ -84,7 +84,7 @@ void getLeastOffset(const int32_t threadIndex,
 				{
 					lockUpdating.lock();
 					bestOffset = bestFunc.offset;
-					memcpy(&bestResults, &results, R_SIZE * sizeof(T));
+					std::copy(std::begin(results), std::end(results), std::begin(bestResults));
 					lockUpdating.unlock();
 				}
 			}

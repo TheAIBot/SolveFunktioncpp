@@ -59,10 +59,7 @@ public:
 	MathFunction(const MathOperator (&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber)
 	{
 		tcRandom = getTCRandom();
-		for (uint32_t i = 0; i < O_SIZE; i++)
-		{
-			allowedOperators[i] = allowedOps[i];
-		}
+		std::copy(std::begin(allowedOps), std::end(allowedOps), std::begin(allowedOperators));
 		minRandomNumber = minNumber;
 		maxRandomNumber = maxNumber;
 	}
@@ -78,7 +75,7 @@ public:
 		{
 			randomNumber[i] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		}
-		memset(&metaData, 0, F_SIZE * sizeof(uint8_t));
+		std::fill(std::begin(metaData), std::end(metaData), 0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
 			uint8_t randomMetaBools = randomRange(0, 3, tcRandom);
@@ -104,8 +101,7 @@ public:
 
 	void calculate(const T(&parameters)[P_SIZE][R_SIZE], T(&results)[R_SIZE], const T(&expectedResults)[R_SIZE])
 	{
-		memcpy(&results, &parameters, R_SIZE * sizeof(T));
-		//memset(&results, 0, R_SIZE * sizeof(T));
+		std::copy(std::begin(parameters[0]), std::end(parameters[0]), std::begin(results));
 
 		int8_t operatorIndex = startOperatorIndex;
 		do
@@ -195,10 +191,10 @@ public:
 
 	void makeCopy(MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> &copyInto)
 	{
-		memcpy(&copyInto.operatorType,		&operatorType,		F_SIZE * sizeof(MathOperator));
-		memcpy(&copyInto.randomNumber,		&randomNumber,		F_SIZE * sizeof(T));
-		memcpy(&copyInto.metaData,			&metaData,			F_SIZE * sizeof(uint8_t));
-		memcpy(&copyInto.nextOperatorIndex, &nextOperatorIndex, F_SIZE * sizeof(int8_t));
+		std::copy(std::begin(operatorType), std::end(operatorType), std::begin(copyInto.operatorType));
+		std::copy(std::begin(randomNumber), std::end(randomNumber), std::begin(copyInto.randomNumber));
+		std::copy(std::begin(metaData), std::end(metaData), std::begin(copyInto.metaData));
+		std::copy(std::begin(nextOperatorIndex), std::end(nextOperatorIndex), std::begin(copyInto.nextOperatorIndex));
 
 		copyInto.offset = offset;
 		copyInto.operatorCount = operatorCount;
@@ -218,7 +214,6 @@ public:
 			index = nextOperatorIndex[index];
 		}
 		copyInto.nextOperatorIndex[operatorCount - 1] = END_OPERATOR;
-		//memset(&, NO_OPERATOR, )
 		for (uint32_t i = operatorCount; i < F_SIZE; i++)
 		{
 			copyInto.nextOperatorIndex[i] = NO_OPERATOR;
