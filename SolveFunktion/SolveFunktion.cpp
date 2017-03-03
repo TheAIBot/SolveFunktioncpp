@@ -16,11 +16,12 @@
 #include "mathfunc.h"
 #include "arrAvg.h"
 #include "cacheAlignedTypes.h"
+#include "threadSharedResources.h"
 
-#define PARAMETERS_VALUE {{ 1,2,3,4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24, 25 }}
+#define PARAMETERS_VALUE     {{ 1,2,3,4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24, 25,  26,  27,  28,  29,  30,  31,  32 }}
 #define DIFFERENT_PARAMETERS_COUNT 1
-#define EXPECTED_RESULT_VALUE { 2,3,5,7,11,13,17,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101 }
-#define RESULT_LENGTH 25
+#define EXPECTED_RESULT_VALUE { 2,3,5,7,11,13,17,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101, 103, 107, 109, 113, 127, 131, 137 }
+#define RESULT_LENGTH 32
 
 //#define PARAMETERS_VALUE {{     1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }}
 //#define DIFFERENT_PARAMETERS_COUNT 1
@@ -30,7 +31,7 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 4
-#define NUMBER_OF_THREADS 4
+#define NUMBER_OF_THREADS 8
 #define MAX_RANDOM_NUMBER -101
 #define MIN_RANDOM_NUMBER  101
 #define STUCK_COUNT_FOR_RESET 1000000
@@ -41,25 +42,23 @@ static std::mutex lockUpdating;
 static FUNCTION_NUMBER_TYPE bestResults[RESULT_LENGTH];
 static float bestOffset = 1000000;
 
-inline int64_t timediff(clock_t t1, clock_t t2)
+inline int64_t timediff(const clock_t t1, const clock_t t2)
 {
 	return static_cast<int64_t>(((t2 - t1) * 1000) / CLOCKS_PER_SEC);
 }
 
 
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
-void getLeastOffset(const int32_t threadIndex, 
-					const T(&parameters)[P_SIZE][R_SIZE], 
+void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE], 
 					const T(&expectedResults)[R_SIZE], 
-					const MathOperator(&allowedOps)[O_SIZE], 
-					const int32_t minNumber, 
-					const int32_t maxNumber,
-					OneDataPerCacheLine<int64_t> &runCount)
+					OneDataPerCacheLine<FunctionData> &functionData)
 {
 	T results[R_SIZE] = { 0 };
 
-	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> bestFunc(allowedOps, minNumber, maxNumber);
-	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> testFunc(allowedOps, minNumber, maxNumber);
+	_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+
+	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> bestFunc;
+	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> testFunc;
 
 	while (1)
 	{
@@ -73,26 +72,31 @@ void getLeastOffset(const int32_t threadIndex,
 		while (stuckCounter < STUCK_COUNT_FOR_RESET)
 		{
 			testFunc.evolve(5);
-			testFunc.calculate(parameters, results, expectedResults);
-
-			if (testFunc.offset < bestFunc.offset)
+			if (!testFunc.calculate(parameters, results, expectedResults))
 			{
-				testFunc.makeSortedCopy(bestFunc);
-				stuckCounter = 0;
-
-				if (bestOffset > bestFunc.offset) // potential override better offset but meh
-				{
-					lockUpdating.lock();
-					bestOffset = bestFunc.offset;
-					std::copy(std::begin(results), std::end(results), std::begin(bestResults));
-					lockUpdating.unlock();
-				}
+				functionData.data.errorCount++;
 			}
 			else
 			{
-				bestFunc.makeCopy(testFunc);
+				if (testFunc.offset < bestFunc.offset)
+				{
+					testFunc.sortedCopyTo(bestFunc);
+					stuckCounter = 0;
+
+					if (bestOffset > bestFunc.offset) // potential override better offset but meh
+					{
+						lockUpdating.lock();
+						bestOffset = bestFunc.offset;
+						std::copy(std::begin(results), std::end(results), std::begin(bestResults));
+						lockUpdating.unlock();
+					}
+				}
+				else
+				{
+					bestFunc.copyTo(testFunc);
+				}
 			}
-			runCount.data++;
+			functionData.data.functionCount++;
 			stuckCounter++;
 		}
 	}
@@ -119,24 +123,22 @@ int main()
 	//const int32_t threadCount = 1;
 
 	std::vector<std::thread> threads(threadCount);
-	OneDataPerCacheLine<int64_t> runCounters[threadCount] = { 0 };
+	OneDataPerCacheLine<FunctionData> functionData[threadCount] = { 0 };
 
+	MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>::setMathFunctionSettings(allowedOps, MIN_RANDOM_NUMBER, MAX_RANDOM_NUMBER);
 	for (int32_t i = 0; i < threadCount; i++)
 	{
 		const int32_t threadIndex = i;
 		threads[i] = std::thread(getLeastOffset<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>,
-								 threadIndex,
 								 std::cref(parameters),
 								 std::cref(expectedResults),
-								 std::cref(allowedOps),
-								 MIN_RANDOM_NUMBER,
-								 MAX_RANDOM_NUMBER,
-								 std::ref(runCounters[threadIndex]));
+								 std::ref(functionData[threadIndex]));
 	}
 
 
 	clock_t startTime = clock();
-	int64_t totalTimes = 0;
+	int64_t oldTotalTimes = 0;
+	int32_t oldTotalErrors = 0;
 	ArrayAverage<int64_t, 20> averageSec;
 	while (1)
 	{
@@ -144,12 +146,17 @@ int main()
 		std::this_thread::sleep_for(1s);
 
 		int64_t newTotalTimes = 0;
+		int32_t newTotalErrors = 0;
 		for (int32_t i = 0; i < threadCount; i++)
 		{
-			newTotalTimes += runCounters[i].data;
+			newTotalTimes += functionData[i].data.functionCount;
+			newTotalErrors += functionData[i].data.errorCount;
 		}
-		int64_t totalTimesDiff = newTotalTimes - totalTimes;
-		totalTimes = newTotalTimes;
+		int64_t totalTimesDiff = newTotalTimes - oldTotalTimes;
+		oldTotalTimes = newTotalTimes;
+
+		int32_t totalErrorDiff = newTotalErrors - oldTotalErrors;
+		oldTotalErrors = newTotalErrors;
 		
 		lockUpdating.lock();
 		int64_t passedTime = timediff(startTime, clock());
@@ -158,10 +165,9 @@ int main()
 		int64_t averageTimes = averageSec.insert(correctedTimes);
 		
 		std::cout << passedTime << std::endl;
-		std::cout << "Total times: " << totalTimes << std::endl;
+		std::cout << "Total times: " << oldTotalTimes << std::endl;
 		std::cout << "Times: " << averageTimes << std::endl;
-		std::cout << "Failed: " << MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>::failedCalculations << std::endl;
-		MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>::failedCalculations = 0;
+		std::cout << "Failed: " << totalErrorDiff << std::endl;
 		std::cout << "Offset: " << bestOffset << std::endl;
 		std::cout << "Functions: " << randomFunctions << std::endl;
 		for (int32_t i = 0; i < RESULT_LENGTH; i++)

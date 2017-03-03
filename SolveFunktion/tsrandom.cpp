@@ -33,7 +33,7 @@ static inline uint64_t fastRandom(struct TCRandom &random)
 	random.x ^= random.x >> 5;
 	random.x ^= random.x << 1;
 
-	uint64_t t = random.x;
+	const uint64_t t = random.x;
 	random.x = random.y;
 	random.y = random.z;
 	random.z = t ^ random.x ^ random.y;
@@ -45,7 +45,7 @@ int32_t randomRange(const int32_t min, const int32_t max, struct TCRandom &rando
 {
 	const uint64_t z = fastRandom(random);
 
-	return min + (z % (int32_t)(max - min + 1));
+	return min + (z % static_cast<int32_t>(max - min + 1));
 }
 
 bool randomBool(struct TCRandom &random)

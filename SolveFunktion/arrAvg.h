@@ -9,10 +9,10 @@ private:
 	T average = 0;
 
 public:
-	T insert(T item)
+	T insert(const T item)
 	{
 		index = (index + 1) % SIZE;
-		T diff = item - items[index];
+		const T diff = item - items[index];
 		items[index] = item;
 		average += diff;
 		return average / SIZE;
