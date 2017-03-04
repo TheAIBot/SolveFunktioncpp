@@ -34,7 +34,7 @@ enum MathOperator : uint8_t
 	NOT = 26
 };
 
-template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 class MathFunction
 {
 #define NO_OPERATOR -1
@@ -73,7 +73,7 @@ public:
 
 	void randomize()
 	{
-		const int32_t functionLength = randomRange(1, F_SIZE, tcRandom);
+		const uint8_t functionLength = static_cast<uint8_t>(randomRange(1, F_SIZE, tcRandom));
 		for (int32_t i = 0; i < functionLength; i++)
 		{
 			operatorType[i] = getRandomMathOperator();
@@ -85,15 +85,15 @@ public:
 		std::fill(std::begin(metaData), std::end(metaData), 0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			const uint8_t randomMetaBools = randomRange(0, 3, tcRandom);
+			const uint8_t randomMetaBools = static_cast<uint8_t>(randomRange(0, 3, tcRandom));
 			setMeta(i, randomMetaBools);
 		}
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			const uint8_t parameterIndex = randomRange(0, P_SIZE - 1, tcRandom);
+			const uint8_t parameterIndex = static_cast<uint8_t>(randomRange(0, P_SIZE - 1, tcRandom));
 			setParameterIndex(i, parameterIndex);
 		}
-		for (int32_t i = 0; i < functionLength - 1; i++)
+		for (int8_t i = 0; i < functionLength - 1; i++)
 		{
 			nextOperatorIndex[i] = i + 1;
 		}
@@ -208,7 +208,7 @@ public:
 	void sortedCopyTo(MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> &copyInto) const
 	{
 		int8_t index = startOperatorIndex;
-		for (uint8_t copyInsertionIndex = 0; copyInsertionIndex < operatorCount; copyInsertionIndex++)
+		for (int8_t copyInsertionIndex = 0; copyInsertionIndex < operatorCount; copyInsertionIndex++)
 		{
 			copyInto.operatorType[copyInsertionIndex] = operatorType[index];
 			copyInto.randomNumber[copyInsertionIndex] = randomNumber[index];
@@ -404,7 +404,7 @@ private:
 	{
 		operatorType[index] = getRandomMathOperator();
 		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
-		setMeta(index, randomRange(0, 3, tcRandom));
+		setMeta(index, static_cast<uint8_t>(randomRange(0, 3, tcRandom)));
 		setParameterIndex(index, randomRange(0, P_SIZE - 1, tcRandom));
 	}
 
@@ -421,14 +421,14 @@ private:
 	}
 };
 
-template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 void MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber);
 
-template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 int32_t MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::minRandomNumber;
 
- template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 int32_t MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::maxRandomNumber;
 
-template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 MathOperator MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::allowedOperators[O_SIZE];

@@ -12,7 +12,7 @@ static uint64_t init_z = 521288629;
 struct TCRandom getTCRandom()
 {
 	initRandomLock.lock();
-	struct TCRandom newRandom = 
+	const struct TCRandom newRandom = 
 	{ 
 		init_x, 
 		init_y, 
@@ -50,5 +50,5 @@ int32_t randomRange(const int32_t min, const int32_t max, struct TCRandom &rando
 
 bool randomBool(struct TCRandom &random)
 {
-	return fastRandom(random) & 0x0000000000000001;
+	return fastRandom(random) & 1;
 }

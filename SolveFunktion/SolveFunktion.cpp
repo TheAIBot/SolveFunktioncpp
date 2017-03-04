@@ -31,9 +31,9 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 4
-#define NUMBER_OF_THREADS 8
-#define MAX_RANDOM_NUMBER -101
-#define MIN_RANDOM_NUMBER  101
+#define NUMBER_OF_THREADS 4
+#define MAX_RANDOM_NUMBER -137
+#define MIN_RANDOM_NUMBER  137
 #define STUCK_COUNT_FOR_RESET 1000000
 
 
@@ -76,26 +76,21 @@ void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE],
 			{
 				functionData.data.errorCount++;
 			}
-			else
+			else if (testFunc.offset < bestFunc.offset)
 			{
-				if (testFunc.offset < bestFunc.offset)
-				{
-					testFunc.sortedCopyTo(bestFunc);
-					stuckCounter = 0;
+				testFunc.sortedCopyTo(bestFunc);
+				stuckCounter = 0;
 
-					if (bestOffset > bestFunc.offset) // potential override better offset but meh
-					{
-						lockUpdating.lock();
-						bestOffset = bestFunc.offset;
-						std::copy(std::begin(results), std::end(results), std::begin(bestResults));
-						lockUpdating.unlock();
-					}
-				}
-				else
+				if (bestOffset > bestFunc.offset) // potential override better offset but meh
 				{
-					bestFunc.copyTo(testFunc);
+					lockUpdating.lock();
+					bestOffset = bestFunc.offset;
+					std::copy(std::begin(results), std::end(results), std::begin(bestResults));
+					lockUpdating.unlock();
 				}
 			}
+
+			bestFunc.copyTo(testFunc);
 			functionData.data.functionCount++;
 			stuckCounter++;
 		}
@@ -152,17 +147,17 @@ int main()
 			newTotalTimes += functionData[i].data.functionCount;
 			newTotalErrors += functionData[i].data.errorCount;
 		}
-		int64_t totalTimesDiff = newTotalTimes - oldTotalTimes;
+		const int64_t totalTimesDiff = newTotalTimes - oldTotalTimes;
 		oldTotalTimes = newTotalTimes;
 
-		int32_t totalErrorDiff = newTotalErrors - oldTotalErrors;
+		const int32_t totalErrorDiff = newTotalErrors - oldTotalErrors;
 		oldTotalErrors = newTotalErrors;
 		
 		lockUpdating.lock();
-		int64_t passedTime = timediff(startTime, clock());
-		int64_t correctedTimes = totalTimesDiff - static_cast<int64_t>(static_cast<float>(totalTimesDiff) * (1 - (static_cast<float>(passedTime) / 1000)));
+		const int64_t passedTime = timediff(startTime, clock());
+		const int64_t correctedTimes = totalTimesDiff - static_cast<int64_t>(static_cast<float>(totalTimesDiff) * (1 - (static_cast<float>(passedTime) / 1000)));
 		
-		int64_t averageTimes = averageSec.insert(correctedTimes);
+		const int64_t averageTimes = averageSec.insert(correctedTimes);
 		
 		std::cout << passedTime << std::endl;
 		std::cout << "Total times: " << oldTotalTimes << std::endl;
@@ -172,15 +167,17 @@ int main()
 		std::cout << "Functions: " << randomFunctions << std::endl;
 		for (int32_t i = 0; i < RESULT_LENGTH; i++)
 		{
-			std::cout << bestResults[i] << ", ";
+			std::cout << abs(bestResults[i] - expectedResults[i]) << ", ";
 		}
 		std::cout << std::endl;
+		/*
+		
 		for (int32_t i = 0; i < RESULT_LENGTH; i++)
 		{
 			std::cout << expectedResults[i] << ", ";
 		}
 		std::cout << std::endl;
-
+		*/
 		startTime = clock();
 		lockUpdating.unlock();
 	}
