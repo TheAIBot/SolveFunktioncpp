@@ -5,33 +5,33 @@
 
 enum MathOperator : uint8_t
 {
-	PLUS = 0,
-	MINUS = 1,
-	MULTIPLY = 2,
-	DIVIDE = 3,
-	POW = 4,
-	ROOT = 5,
-	EXP = 6,
-	NLOG = 7,
-	LOG = 8,
-	MOD = 9,
-	FLOOR = 10,
-	CEIL = 11,
-	ROUND = 12,
-	SIN = 13,
-	COS = 14,
-	TAN = 15,
-	ASIN = 16,
-	ACOS = 17,
-	ATAN = 18,
-	ABS = 19,
-	AND = 20,
-	NAND = 21,
-	OR = 22,
-	NOR = 23,
-	XOR = 24,
-	XNOR = 25,
-	NOT = 26
+	PLUS     =  0,
+	MINUS    =  1,
+	MULTIPLY =  2,
+	DIVIDE   =  3,
+	POW      =  4,
+	ROOT     =  5,
+	EXP      =  6,
+	NLOG     =  7,
+	LOG      =  8,
+	MOD      =  9,
+	FLOOR    = 10,
+	CEIL     = 11,
+	ROUND    = 12,
+	SIN      = 13,
+	COS      = 14,
+	TAN      = 15,
+	ASIN     = 16,
+	ACOS     = 17,
+	ATAN     = 18,
+	ABS      = 19,
+	AND      = 20,
+	NAND     = 21,
+	OR       = 22,
+	NOR      = 23,
+	XOR      = 24,
+	XNOR     = 25,
+	NOT      = 26
 };
 
 template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
@@ -106,7 +106,7 @@ public:
 		startOperatorIndex = 0;
 	}
 
-	bool calculate(const T(&parameters)[P_SIZE][R_SIZE], T(&results)[R_SIZE], const T(&expectedResults)[R_SIZE])
+	bool calculate(const T(&parameters)[P_SIZE][R_SIZE], T(&results)[R_SIZE], const T(&expectedResults)[R_SIZE], const T(&reciprocalExpectedResults)[R_SIZE], const T(&reciprocalParameters)[P_SIZE][R_SIZE])
 	{
 		std::copy(std::begin(parameters[0]), std::end(parameters[0]), std::begin(results));
 
@@ -170,7 +170,8 @@ public:
 				}
 				break;
 			case 15:
-				success = calculateDivideReversed(parameters[parameterIndex], results);
+				//success = calculateDivideReversed(parameters[parameterIndex], results);
+				success = calculateDivideReversedReciprocal(reciprocalParameters[parameterIndex], results);
 				if (!success)
 				{
 					goto failedDivision;
@@ -184,7 +185,7 @@ public:
 		offset = 0;
 		for (uint32_t i = 0; i < R_SIZE; i++)
 		{
-			offset += std::abs((expectedResults[i] - results[i]) / expectedResults[i]);
+			offset += std::abs((expectedResults[i] - results[i]) * reciprocalExpectedResults[i]);
 		}
 		return true;
 

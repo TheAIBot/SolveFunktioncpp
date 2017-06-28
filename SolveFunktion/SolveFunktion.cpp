@@ -1,6 +1,3 @@
-// SolveFunktion.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <iostream>
 #include <cstdint>
@@ -51,11 +48,13 @@ inline int64_t timediff(const clock_t t1, const clock_t t2)
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE], 
 					const T(&expectedResults)[R_SIZE], 
-					OneDataPerCacheLine<FunctionData> &functionData)
+					OneDataPerCacheLine<FunctionData> &functionData,
+					const T(&reciprocalExpectedResults)[R_SIZE],
+					const T(&reciprocalParameters)[P_SIZE][R_SIZE])
 {
 	T results[R_SIZE] = { 0 };
 
-	_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+	//_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
 	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> bestFunc;
 	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> testFunc;
@@ -63,7 +62,7 @@ void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE],
 	while (1)
 	{
 		bestFunc.randomize();
-		bestFunc.calculate(parameters, results, expectedResults);
+		bestFunc.calculate(parameters, results, expectedResults, reciprocalExpectedResults, reciprocalParameters);
 		testFunc.randomize();
 		randomFunctions++;
 
@@ -72,7 +71,7 @@ void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE],
 		while (stuckCounter < STUCK_COUNT_FOR_RESET)
 		{
 			testFunc.evolve(5);
-			if (!testFunc.calculate(parameters, results, expectedResults))
+			if (!testFunc.calculate(parameters, results, expectedResults, reciprocalExpectedResults, reciprocalParameters))
 			{
 				functionData.data.errorCount++;
 			}
@@ -110,7 +109,20 @@ int main()
 	const FUNCTION_NUMBER_TYPE expectedResults[RESULT_LENGTH] = EXPECTED_RESULT_VALUE;
 	const MathOperator allowedOps[ALLOWED_OPS_LENGTH] = {PLUS, MINUS, MULTIPLY, DIVIDE, /*POW, ROOT*/};
 
+	float reciprocalExpectedResults[RESULT_LENGTH];
+	for (int32_t i = 0; i < RESULT_LENGTH; i++)
+	{
+		reciprocalExpectedResults[i] = 1 / expectedResults[i];
+	}
 
+	float reciprocalParameters[DIFFERENT_PARAMETERS_COUNT][RESULT_LENGTH];
+	for (int32_t i = 0; i < DIFFERENT_PARAMETERS_COUNT; i++)
+	{
+		for (int32_t y = 0; y < RESULT_LENGTH; y++)
+		{
+			reciprocalParameters[i][y] = 1 / parameters[i][y];
+		}
+	}
 
 	std::cout << sizeof(MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>) << std::endl;
 
@@ -127,7 +139,9 @@ int main()
 		threads[i] = std::thread(getLeastOffset<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>,
 								 std::cref(parameters),
 								 std::cref(expectedResults),
-								 std::ref(functionData[threadIndex]));
+								 std::ref(functionData[threadIndex]),
+								 std::cref(reciprocalExpectedResults),
+								 std::cref(reciprocalParameters));
 	}
 
 
@@ -159,12 +173,13 @@ int main()
 		
 		const int64_t averageTimes = averageSec.insert(correctedTimes);
 		
-		std::cout << passedTime << std::endl;
-		std::cout << "Total times: " << oldTotalTimes << std::endl;
-		std::cout << "Times: " << averageTimes << std::endl;
-		std::cout << "Failed: " << totalErrorDiff << std::endl;
-		std::cout << "Offset: " << bestOffset << std::endl;
-		std::cout << "Functions: " << randomFunctions << std::endl;
+		std::cout <<                    passedTime      << std::endl;
+		std::cout << "Total times: " << oldTotalTimes   << std::endl;
+		std::cout << "Times: "       << averageTimes    << std::endl;
+		std::cout << "Failed: "      << totalErrorDiff  << std::endl;
+		std::cout << "Offset: "      << bestOffset      << std::endl;
+		std::cout << "Functions: "   << randomFunctions << std::endl;
+
 		for (int32_t i = 0; i < RESULT_LENGTH; i++)
 		{
 			std::cout << abs(bestResults[i] - expectedResults[i]) << ", ";

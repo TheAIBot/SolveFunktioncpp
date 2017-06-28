@@ -5,9 +5,9 @@
 
 static std::mutex initRandomLock;
 
-static uint64_t init_x = 123456789;
-static uint64_t init_y = 362436069;
-static uint64_t init_z = 521288629;
+static uint64_t init_x = 236432356;
+static uint64_t init_y = 395824682;
+static uint64_t init_z = 443425897;
 
 struct TCRandom getTCRandom()
 {

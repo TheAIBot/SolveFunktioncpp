@@ -128,6 +128,15 @@ inline bool calculateDivideReversed(const T(& __restrict parameters)[N], T(& __r
 	}
 	return true;
 }
+template<typename T, int32_t N>
+inline bool calculateDivideReversedReciprocal(const T(&__restrict reciprocalParameters)[N], T(&__restrict results)[N])
+{
+	for (int32_t i = 0; i < N; i++)
+	{
+		results[i] *= reciprocalParameters[i];
+	}
+	return true;
+}
 
 
 template<typename T, int32_t N>
