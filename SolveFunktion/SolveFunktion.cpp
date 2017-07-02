@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <iostream>
 #include <cstdint>
 #include <cmath>
@@ -9,7 +8,6 @@
 #include <locale>
 #include <mutex> 
 #include "omath.h"
-#include "tsrandom.h"
 #include "mathfunc.h"
 #include "arrAvg.h"
 #include "cacheAlignedTypes.h"
@@ -28,13 +26,14 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 4
-#define NUMBER_OF_THREADS 4
+#define NUMBER_OF_THREADS 8
 #define MAX_RANDOM_NUMBER -137
 #define MIN_RANDOM_NUMBER  137
 #define STUCK_COUNT_FOR_RESET 1000000
 
 
-static std::atomic_int64_t randomFunctions = 0;
+//static std::atomic_int64_t randomFunctions;
+static std::atomic<std::int64_t> randomFunctions;
 static std::mutex lockUpdating;
 static FUNCTION_NUMBER_TYPE bestResults[RESULT_LENGTH];
 static float bestOffset = 1000000;
@@ -129,7 +128,7 @@ int main()
 	const int32_t threadCount = NUMBER_OF_THREADS;
 	//const int32_t threadCount = 1;
 
-	std::vector<std::thread> threads(threadCount);
+	std::thread threads[threadCount];
 	OneDataPerCacheLine<FunctionData> functionData[threadCount] = { 0 };
 
 	MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>::setMathFunctionSettings(allowedOps, MIN_RANDOM_NUMBER, MAX_RANDOM_NUMBER);

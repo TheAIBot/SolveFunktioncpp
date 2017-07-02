@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <cstdint>
 #include <cmath>
 
@@ -152,14 +151,14 @@ void calculatePow(const float(&parameters)[N], float(&results)[N], const float r
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::powf(randomNumber, results[i]);
+				results[i] = std::pow(randomNumber, results[i]);
 			}
 		}
 		else
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::powf(results[i], randomNumber);
+				results[i] = std::pow(results[i], randomNumber);
 			}
 		}
 	}
@@ -169,14 +168,14 @@ void calculatePow(const float(&parameters)[N], float(&results)[N], const float r
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::powf(parameters[i], results[i]);
+				results[i] = std::pow(parameters[i], results[i]);
 			}
 		}
 		else
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::powf(results[i], parameters[i]);
+				results[i] = std::pow(results[i], parameters[i]);
 			}
 		}
 	}
@@ -192,7 +191,7 @@ void calculateRoot(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::sqrtf(results[i]);
+		results[i] = std::sqrt(results[i]);
 	}
 }
 
@@ -206,7 +205,7 @@ void calculateExp(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::expf(results[i]);
+		results[i] = std::exp(results[i]);
 	}
 }
 
@@ -220,7 +219,7 @@ void calculateNLog(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::logf(results[i]);
+		results[i] = std::log(results[i]);
 	}
 }
 
@@ -234,7 +233,7 @@ void calculateLog(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::log10f(results[i]);
+		results[i] = std::log10(results[i]);
 	}
 }
 
@@ -248,14 +247,14 @@ void calculateMod(const float(&parameters)[N], float(&results)[N], const float r
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::fmodf(randomNumber, results[i]);
+				results[i] = std::fmod(randomNumber, results[i]);
 			}
 		}
 		else
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::fmodf(results[i], randomNumber);
+				results[i] = std::fmod(results[i], randomNumber);
 			}
 		}
 	}
@@ -265,14 +264,14 @@ void calculateMod(const float(&parameters)[N], float(&results)[N], const float r
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::fmodf(parameters[i], results[i]);
+				results[i] = std::fmod(parameters[i], results[i]);
 			}
 		}
 		else
 		{
 			for (int32_t i = 0; i < N; i++)
 			{
-				results[i] = std::fmodf(results[i], parameters[i]);
+				results[i] = std::fmod(results[i], parameters[i]);
 			}
 		}
 	}
@@ -326,7 +325,7 @@ void calculateFloor(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::floorf(results[i]);
+		results[i] = std::floor(results[i]);
 	}
 }
 
@@ -340,7 +339,7 @@ void calculateCeil(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::ceilf(results[i]);
+		results[i] = std::ceil(results[i]);
 	}
 }
 
@@ -354,7 +353,7 @@ void calculateRound(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::roundf(results[i]);
+		results[i] = std::round(results[i]);
 	}
 }
 
@@ -368,7 +367,7 @@ void calculateSin(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::sinf(results[i]);
+		results[i] = std::sin(results[i]);
 	}
 }
 
@@ -382,7 +381,7 @@ void calculateCos(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::cosf(results[i]);
+		results[i] = std::cos(results[i]);
 	}
 }
 
@@ -396,7 +395,7 @@ void calculateTan(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::tanf(results[i]);
+		results[i] = std::tan(results[i]);
 	}
 }
 
@@ -410,7 +409,7 @@ void calculateASin(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::asinf(results[i]);
+		results[i] = std::asin(results[i]);
 	}
 }
 
@@ -424,7 +423,7 @@ void calculateACos(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::acosf(results[i]);
+		results[i] = std::acos(results[i]);
 	}
 }
 
@@ -438,7 +437,7 @@ void calculateATan(float(&results)[N])
 {
 	for (int32_t i = 0; i < N; i++)
 	{
-		results[i] = std::atanf(results[i]);
+		results[i] = std::atan(results[i]);
 	}
 
 }

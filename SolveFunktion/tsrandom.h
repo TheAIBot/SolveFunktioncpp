@@ -1,14 +1,20 @@
 #pragma once
 
-int32_t randomRange(const int32_t min, const int32_t max, struct TCRandom &random);
+namespace FRandom {
 
-bool randomBool(struct TCRandom &random);
+	//_declspec(dllimport)
+		int32_t randomRange(const int32_t min, const int32_t max, struct TCRandom &random);
 
-struct TCRandom getTCRandom();
+	//_declspec(dllimport)
+		bool randomBool(struct TCRandom &random);
 
-struct TCRandom
-{
-	uint64_t x;
-	uint64_t y;
-	uint64_t z;
-};
+	//_declspec(dllimport)
+		struct TCRandom getTCRandom();
+
+	struct TCRandom
+	{
+		uint64_t x;
+		uint64_t y;
+		uint64_t z;
+	};
+}

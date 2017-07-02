@@ -18,16 +18,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="omath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tsrandom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mathfunc.h">
@@ -44,16 +35,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SolveFunktion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="omath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tsrandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

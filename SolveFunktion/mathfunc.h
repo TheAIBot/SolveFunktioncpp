@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cacheAlignedTypes.h"
+#include "tsrandom.h"
 
 
 enum MathOperator : uint8_t
@@ -61,7 +61,7 @@ public:
 
 	MathFunction()
 	{
-		tcRandom = getTCRandom();
+		tcRandom = FRandom::getTCRandom();
 	}
 
 	static void setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber)
@@ -73,24 +73,24 @@ public:
 
 	void randomize()
 	{
-		const uint8_t functionLength = static_cast<uint8_t>(randomRange(1, F_SIZE, tcRandom));
+		const uint8_t functionLength = static_cast<uint8_t>(FRandom::randomRange(1, F_SIZE, tcRandom));
 		for (int32_t i = 0; i < functionLength; i++)
 		{
 			operatorType[i] = getRandomMathOperator();
 		}
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			randomNumber[i] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
+			randomNumber[i] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		}
 		std::fill(std::begin(metaData), std::end(metaData), 0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			const uint8_t randomMetaBools = static_cast<uint8_t>(randomRange(0, 3, tcRandom));
+			const uint8_t randomMetaBools = static_cast<uint8_t>(FRandom::randomRange(0, 3, tcRandom));
 			setMeta(i, randomMetaBools);
 		}
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			const uint8_t parameterIndex = static_cast<uint8_t>(randomRange(0, P_SIZE - 1, tcRandom));
+			const uint8_t parameterIndex = static_cast<uint8_t>(FRandom::randomRange(0, P_SIZE - 1, tcRandom));
 			setParameterIndex(i, parameterIndex);
 		}
 		for (int8_t i = 0; i < functionLength - 1; i++)
@@ -230,12 +230,12 @@ public:
 
 	void evolve(const int32_t maxEvolve)
 	{
-		const int32_t evolveCount = randomRange(1, maxEvolve, tcRandom);
-		if (randomBool(tcRandom))
+		const int32_t evolveCount = FRandom::randomRange(1, maxEvolve, tcRandom);
+		if (FRandom::randomBool(tcRandom))
 		{
 			for (int32_t i = 0; i < evolveCount; i++)
 			{
-				switch (randomRange(0, 2, tcRandom))
+				switch (FRandom::randomRange(0, 2, tcRandom))
 				{
 				case 0:
 					if (canRemoveOperator())
@@ -257,7 +257,7 @@ public:
 		}
 		else
 		{
-			if (randomBool(tcRandom))
+			if (FRandom::randomBool(tcRandom))
 			{
 				for (int32_t i = 0; i < evolveCount; i++)
 				{
@@ -279,7 +279,7 @@ private:
 	static int32_t maxRandomNumber;
 	static MathOperator allowedOperators[O_SIZE];
 
-	struct TCRandom tcRandom;
+	struct FRandom::TCRandom tcRandom;
 	T randomNumber[F_SIZE];
 	int8_t operatorCount = 0;
 	int8_t startOperatorIndex = 0;
@@ -308,15 +308,15 @@ private:
 
 	inline MathOperator getRandomMathOperator()
 	{
-		return allowedOperators[randomRange(0, O_SIZE - 1, tcRandom)];
+		return allowedOperators[FRandom::randomRange(0, O_SIZE - 1, tcRandom)];
 	}
 
 	inline int32_t getRandomOperatorIndex()
 	{
-		int32_t index = randomRange(0, F_SIZE - 1, tcRandom);
+		int32_t index = FRandom::randomRange(0, F_SIZE - 1, tcRandom);
 		while (nextOperatorIndex[index] == NO_OPERATOR)
 		{
-			index = randomRange(0, F_SIZE - 1, tcRandom);
+			index = FRandom::randomRange(0, F_SIZE - 1, tcRandom);
 		}
 		return index;
 	}
@@ -404,26 +404,26 @@ private:
 	void randomizeOperator(const int index)
 	{
 		operatorType[index] = getRandomMathOperator();
-		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
-		setMeta(index, static_cast<uint8_t>(randomRange(0, 3, tcRandom)));
-		setParameterIndex(index, randomRange(0, P_SIZE - 1, tcRandom));
+		randomNumber[index] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
+		setMeta(index, static_cast<uint8_t>(FRandom::randomRange(0, 3, tcRandom)));
+		setParameterIndex(index, FRandom::randomRange(0, P_SIZE - 1, tcRandom));
 	}
 
 	void changeOperatorNumber()
 	{
 		const int32_t index = getRandomOperatorIndex();
-		randomNumber[index] = static_cast<T>(randomRange(minRandomNumber, maxRandomNumber, tcRandom));
+		randomNumber[index] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 	}
 
 	void incrementChangeOperatorNumber()
 	{
 		const int32_t index = getRandomOperatorIndex();
-		randomNumber[index] += (randomBool(tcRandom)) ? 1 : -1;
+		randomNumber[index] += (FRandom::randomBool(tcRandom)) ? 1 : -1;
 	}
 };
 
-template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
-void MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber);
+//template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
+//void MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber);
 
 template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 int32_t MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::minRandomNumber;
