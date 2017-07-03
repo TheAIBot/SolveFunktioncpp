@@ -5,33 +5,41 @@
 
 enum MathOperator : uint8_t
 {
-	PLUS     =  0,
-	MINUS    =  1,
-	MULTIPLY =  2,
-	DIVIDE   =  3,
-	POW      =  4,
-	ROOT     =  5,
-	EXP      =  6,
-	NLOG     =  7,
-	LOG      =  8,
-	MOD      =  9,
-	FLOOR    = 10,
-	CEIL     = 11,
-	ROUND    = 12,
-	SIN      = 13,
-	COS      = 14,
-	TAN      = 15,
-	ASIN     = 16,
-	ACOS     = 17,
-	ATAN     = 18,
-	ABS      = 19,
-	AND      = 20,
-	NAND     = 21,
-	OR       = 22,
-	NOR      = 23,
-	XOR      = 24,
-	XNOR     = 25,
-	NOT      = 26
+	PLUS_PARAMETER				  =  1,
+	PLUS_RANDOM_NUMBER			  =  2,
+	MINUS_PARAMETER				  =  3,
+	MINUS_RANDOM_NUMBER			  =  4,
+	MINUS_PARAMETER_REVERSED	  =  5,
+	MINUS_RANDOM_NUMBER_REVERSED  =  6,
+	MULTIPLY_PARAMETER			  =  7,
+	MULTIPLY_RANDOM_NUMBER		  =  8,
+	DIVIDE_PARAMETER			  =  9,
+	DIVIDE_RANDOM_NUMBER		  = 10,
+	DIVIDE_PARAMETER_REVERSED	  = 11,
+	DIVIDE_RANDOM_NUMBER_REVERSED = 12,
+	POW      =  13,
+	ROOT     = 14,
+	EXP      = 15,
+	NLOG     = 16,
+	LOG      = 17,
+	MOD      = 18,
+	FLOOR    = 19,
+	CEIL     = 20,
+	ROUND    = 21,
+	SIN      = 22,
+	COS      = 23,
+	TAN      = 24,
+	ASIN     = 25,
+	ACOS     = 26,
+	ATAN     = 27,
+	ABS      = 28,
+	AND      = 29,
+	NAND     = 30,
+	OR       = 31,
+	NOR      = 32,
+	XOR      = 33,
+	XNOR     = 34,
+	NOT      = 35
 };
 
 template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
@@ -43,8 +51,6 @@ class MathFunction
 #define IS_START_INDEX(x) (x == startOperatorIndex)
 #define IS_END_INDEX(x) (nextOperatorIndex[x] == END_OPERATOR)
 	
-#define META_SHIFT 0
-#define META_MASK 0x03
 #define PARAMETER_INDEX_SHIFT 2
 #define PARAMETER_INDEX_MASK 0xFC
 #define MAX_PARAMETER_COUNT 64
@@ -85,11 +91,6 @@ public:
 		std::fill(std::begin(metaData), std::end(metaData), 0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
-			const uint8_t randomMetaBools = static_cast<uint8_t>(FRandom::randomRange(0, 3, tcRandom));
-			setMeta(i, randomMetaBools);
-		}
-		for (int32_t i = 0; i < functionLength; i++)
-		{
 			const uint8_t parameterIndex = static_cast<uint8_t>(FRandom::randomRange(0, P_SIZE - 1, tcRandom));
 			setParameterIndex(i, parameterIndex);
 		}
@@ -114,64 +115,56 @@ public:
 		do
 		{
 			const int32_t parameterIndex = getParameterIndex(operatorIndex);
-			const uint8_t meta = getMeta(operatorIndex);
-			const uint8_t operatorNumber = static_cast<uint8_t>(operatorType[operatorIndex]);
-			const int32_t operatorVersionType = operatorNumber * 4 + meta;
 			bool success = true;
-			switch (operatorVersionType)
+			switch (operatorType[operatorIndex])
 			{
-			case 0:
-			case 1:
-				calculatePlus(results, randomNumber[operatorIndex]);
-				break;
-			case 2:
-			case 3:
+			case MathOperator::PLUS_PARAMETER:
 				calculatePlus(parameters[parameterIndex], results);
 				break;
-			case 4:
-				calculateMinus(results, randomNumber[operatorIndex]);
+			case MathOperator::PLUS_RANDOM_NUMBER:
+				calculatePlus(results, randomNumber[operatorIndex]);
 				break;
-			case 5:
-				calculateMinusReversed(results, randomNumber[operatorIndex]);
-				break;
-			case 6:
+			case MathOperator::MINUS_PARAMETER:
 				calculateMinus(parameters[parameterIndex], results);
 				break;
-			case 7:
+			case MathOperator::MINUS_RANDOM_NUMBER:
+				calculateMinus(results, randomNumber[operatorIndex]);
+				break;
+			case MathOperator::MINUS_PARAMETER_REVERSED:
 				calculateMinusReversed(parameters[parameterIndex], results);
 				break;
-			case 8:
-			case 9:
-				calculateMultiply(results, randomNumber[operatorIndex]);
+			case MathOperator::MINUS_RANDOM_NUMBER_REVERSED:
+				calculateMinusReversed(results, randomNumber[operatorIndex]);
 				break;
-			case 10:
-			case 11:
+			case MathOperator::MULTIPLY_PARAMETER:
 				calculateMultiply(parameters[parameterIndex], results);
 				break;
-			case 12:
-				success = calculateDivide(results, randomNumber[operatorIndex]);
-				if (!success)
-				{
-					goto failedDivision;
-				}
+			case MathOperator::MULTIPLY_RANDOM_NUMBER:
+				calculateMultiply(results, randomNumber[operatorIndex]);
 				break;
-			case 13:
-				success = calculateDivideReversed(results, randomNumber[operatorIndex]);
-				if (!success)
-				{
-					goto failedDivision;
-				}
-				break;
-			case 14:
+			case MathOperator::DIVIDE_PARAMETER:
 				success = calculateDivide(parameters[parameterIndex], results);
 				if (!success)
 				{
 					goto failedDivision;
 				}
 				break;
-			case 15:
-				//success = calculateDivideReversed(parameters[parameterIndex], results);
+			case MathOperator::DIVIDE_RANDOM_NUMBER:
+				success = calculateDivide(results, randomNumber[operatorIndex]);
+				if (!success)
+				{
+					goto failedDivision;
+				}
+				break;
+			case MathOperator::DIVIDE_PARAMETER_REVERSED:
 				success = calculateDivideReversedReciprocal(reciprocalParameters[parameterIndex], results);
+				if (!success)
+				{
+					goto failedDivision;
+				}
+				break;
+			case MathOperator::DIVIDE_RANDOM_NUMBER_REVERSED:
+				success = calculateDivideReversed(results, randomNumber[operatorIndex]);
 				if (!success)
 				{
 					goto failedDivision;
@@ -286,16 +279,7 @@ private:
 	MathOperator operatorType[F_SIZE];
 	uint8_t metaData[F_SIZE];
 	int8_t nextOperatorIndex[F_SIZE];
-	
 
-	inline uint8_t getMeta(const int32_t index)
-	{
-		return GET_META_DATA(index, META_MASK, META_SHIFT);
-	}
-	inline void setMeta(const int32_t index, const uint8_t value)
-	{
-		SET_META_DATA(index, value, META_MASK, META_SHIFT);
-	}
 
 	inline int32_t getParameterIndex(const int32_t index)
 	{
@@ -405,7 +389,6 @@ private:
 	{
 		operatorType[index] = getRandomMathOperator();
 		randomNumber[index] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
-		setMeta(index, static_cast<uint8_t>(FRandom::randomRange(0, 3, tcRandom)));
 		setParameterIndex(index, FRandom::randomRange(0, P_SIZE - 1, tcRandom));
 	}
 
