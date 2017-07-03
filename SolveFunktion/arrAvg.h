@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 template<typename T, int32_t SIZE>
 class ArrayAverage
 {
@@ -9,7 +11,7 @@ private:
 	T average = 0;
 
 public:
-	T insert(const T item)
+	T insert(const T item) 
 	{
 		index = (index + 1) % SIZE;
 		const T diff = item - items[index];
@@ -17,6 +19,4 @@ public:
 		average += diff;
 		return average / SIZE;
 	}
-
 };
-

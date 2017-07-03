@@ -123,8 +123,6 @@ int main()
 		}
 	}
 
-	std::cout << sizeof(MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>) << std::endl;
-
 	const int32_t threadCount = NUMBER_OF_THREADS;
 	//const int32_t threadCount = 1;
 
@@ -142,6 +140,18 @@ int main()
 								 std::cref(reciprocalExpectedResults),
 								 std::cref(reciprocalParameters));
 	}
+
+
+	const int classSize = sizeof(MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>);
+	const int arraysSize =  sizeof(parameters) +
+							sizeof(expectedResults) +
+							sizeof(allowedOps) +
+							sizeof(reciprocalExpectedResults) +
+							sizeof(reciprocalParameters) +
+							sizeof(parameters) +
+							sizeof(threads) +
+							sizeof(functionData);
+	std::cout << "Ram used: " << (classSize + arraysSize) << " bytes" << std::endl;
 
 
 	clock_t startTime = clock();
