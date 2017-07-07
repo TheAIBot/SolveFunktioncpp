@@ -7,6 +7,8 @@
 #include <atomic>
 #include <locale>
 #include <mutex> 
+#include <ratio>
+#include <chrono>
 #include "omath.h"
 #include "mathfunc.h"
 #include "arrAvg.h"
@@ -26,7 +28,7 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 12
-#define NUMBER_OF_THREADS 4
+#define NUMBER_OF_THREADS 8
 #define MAX_RANDOM_NUMBER -137
 #define MIN_RANDOM_NUMBER  137
 #define STUCK_COUNT_FOR_RESET 1000000
@@ -37,12 +39,6 @@ static std::atomic<std::int64_t> randomFunctions;
 static std::mutex lockUpdating;
 static FUNCTION_NUMBER_TYPE bestResults[RESULT_LENGTH];
 static float bestOffset = 1000000;
-
-inline int64_t timediff(const clock_t t1, const clock_t t2)
-{
-	return static_cast<int64_t>(((t2 - t1) * 1000) / CLOCKS_PER_SEC);
-}
-
 
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE], 
@@ -155,7 +151,7 @@ int main()
 								 std::cref(reciprocalExpectedResults),
 								 std::cref(reciprocalParameters));
 	}
-
+	
 
 	const int classSize = sizeof(MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>);
 	const int arraysSize =  sizeof(parameters) +
@@ -169,7 +165,7 @@ int main()
 	std::cout << "Ram used: " << (classSize + arraysSize) << " bytes" << std::endl;
 
 
-	clock_t startTime = clock();
+	auto startTime = std::chrono::system_clock::now();
 	int64_t oldTotalTimes = 0;
 	int32_t oldTotalErrors = 0;
 	ArrayAverage<int64_t, 20> averageSec;
@@ -192,9 +188,10 @@ int main()
 		oldTotalErrors = newTotalErrors;
 		
 		lockUpdating.lock();
-		const int64_t passedTime = timediff(startTime, clock());
+        auto timeSpan = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime);
+        const int32_t passedTime = timeSpan.count();
 		const int64_t correctedTimes = totalTimesDiff - static_cast<int64_t>(static_cast<float>(totalTimesDiff) * (1 - (static_cast<float>(passedTime) / 1000)));
-		
+        
 		const int64_t averageTimes = averageSec.insert(correctedTimes);
 		
 		std::cout <<                    passedTime      << std::endl;
@@ -217,7 +214,7 @@ int main()
 		}
 		std::cout << std::endl;
 		*/
-		startTime = clock();
+		startTime = std::chrono::system_clock::now();
 		lockUpdating.unlock();
 	}
 
