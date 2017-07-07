@@ -1,6 +1,7 @@
 OBJS = omath.o SolveFunktion.o tsrandom.o
-LIBS = -lm
-CFLAGS = -Wall -O3 -ffast-math -pthread -flto
+LIBS = -lm 
+#-L../../../Libraries -ltsrandom
+CFLAGS = -Wall -O3 -ffast-math -pthread -flto -fuse-linker-plugin -march=native -I../../../Includes
 
 all: solver
 
