@@ -170,6 +170,8 @@ public:
 					goto failedDivision;
 				}
 				break;
+            default:
+                break;
 			}
 						
 			operatorIndex = nextOperatorIndex[operatorIndex];
