@@ -52,13 +52,8 @@ class MathFunction
 #define IS_START_INDEX(x) (x == startOperatorIndex)
 #define IS_END_INDEX(x) (nextOperatorIndex[x] == END_OPERATOR)
 	
-#define PARAMETER_INDEX_SHIFT 2
-#define PARAMETER_INDEX_MASK 0xFC
 #define MAX_PARAMETER_COUNT 64
 #define MAX_OPERATOR_COUNT 127
-
-#define GET_META_DATA(index, mask, shift) ((metaData[index] & mask) >> shift)
-#define SET_META_DATA(index, value, mask, shift) (metaData[index] |= (mask & (value << shift)))
 
 	static_assert(P_SIZE <= MAX_PARAMETER_COUNT, "Too many parameters given");
 	static_assert(F_SIZE <= MAX_OPERATOR_COUNT, "The function can't contain that many operators");
@@ -196,11 +191,10 @@ public:
 
 	void copyTo(MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> &copyInto) const
 	{
-		std::copy(std::begin(operatorType), std::end(operatorType), std::begin(copyInto.operatorType));
-		std::copy(std::begin(randomNumber), std::end(randomNumber), std::begin(copyInto.randomNumber));
-		std::copy(std::begin(metaData), std::end(metaData), std::begin(copyInto.metaData));
-		std::copy(std::begin(nextOperatorIndex), std::end(nextOperatorIndex), std::begin(copyInto.nextOperatorIndex));
-
+		copyInto.operatorType = operatorType;
+		copyInto.randomNumber = randomNumber;
+		copyInto.metaData = metaData;
+		copyInto.nextOperatorIndex = nextOperatorIndex;
 		copyInto.offset = offset;
 		copyInto.operatorCount = operatorCount;
 		copyInto.startOperatorIndex = 0;
@@ -275,11 +269,14 @@ public:
 	}
 
 private:
+	const static uint32_t PARAMETER_INDEX_SHIFT = 2;
+	const static uint32_t PARAMETER_INDEX_MASK = 0b1111'1100;
+
 	static int32_t minRandomNumber;
 	static int32_t maxRandomNumber;
 	static std::array<MathOperator, O_SIZE> allowedOperators;
 
-	struct FRandom::TCRandom tcRandom;
+	FRandom::TCRandom tcRandom;
 	int8_t operatorCount = 0;
 	int8_t startOperatorIndex = 0;
 	std::array<T, F_SIZE> randomNumber;
@@ -290,11 +287,13 @@ private:
 
 	inline int32_t getParameterIndex(const int32_t index)
 	{
-		return GET_META_DATA(index, PARAMETER_INDEX_MASK, PARAMETER_INDEX_SHIFT);
+		//return (metaData[index] & PARAMETER_INDEX_MASK) >> PARAMETER_INDEX_SHIFT;
+		return metaData[index];
 	}
 	inline void setParameterIndex(const int32_t index, const int32_t value)
 	{
-		SET_META_DATA(index, value, PARAMETER_INDEX_MASK, PARAMETER_INDEX_SHIFT);
+		//metaData[index] |= (PARAMETER_INDEX_MASK & (value << PARAMETER_INDEX_SHIFT)):
+		metaData[index] = value;
 	}
 
 	inline MathOperator getRandomMathOperator()
@@ -411,9 +410,6 @@ private:
 		randomNumber[index] += (FRandom::randomBool(tcRandom)) ? 1 : -1;
 	}
 };
-
-//template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
-//void MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber);
 
 template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
 int32_t MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::minRandomNumber;

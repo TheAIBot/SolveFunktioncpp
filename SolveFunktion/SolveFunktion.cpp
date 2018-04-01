@@ -38,7 +38,7 @@
 //static std::atomic_int64_t randomFunctions;
 static std::atomic<std::int64_t> randomFunctions;
 static std::mutex lockUpdating;
-static FUNCTION_NUMBER_TYPE bestResults[RESULT_LENGTH];
+static std::array<FUNCTION_NUMBER_TYPE, RESULT_LENGTH> bestResults;
 static float bestOffset = 1000000;
 
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
@@ -55,7 +55,7 @@ void getLeastOffset(const std::array<std::array<T, R_SIZE>, P_SIZE>& parameters,
 	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> bestFunc;
 	MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE> testFunc;
 
-	while (1)
+	while (true)
 	{
 		bestFunc.randomize();
 		bestFunc.calculate(parameters, results, expectedResults, reciprocalExpectedResults, reciprocalParameters);
@@ -80,7 +80,7 @@ void getLeastOffset(const std::array<std::array<T, R_SIZE>, P_SIZE>& parameters,
 				{
 					lockUpdating.lock();
 					bestOffset = bestFunc.offset;
-					std::copy(std::begin(results), std::end(results), std::begin(bestResults));
+					bestResults = results;
 					lockUpdating.unlock();
 				}
 			}
