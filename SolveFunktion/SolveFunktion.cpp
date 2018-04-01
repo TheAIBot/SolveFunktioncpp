@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstdint>
 #include <cmath>
-#include <time.h>
 #include <thread>
 #include <random>
 #include <atomic>
 #include <locale>
 #include <mutex> 
 #include <ratio>
+#include <array>
+#include <tuple>
 #include <chrono>
 #include "omath.h"
 #include "mathfunc.h"
@@ -28,7 +29,7 @@
 #define FUNCTION_NUMBER_TYPE float
 #define FUNCTION_LENGTH 20
 #define ALLOWED_OPS_LENGTH 12
-#define NUMBER_OF_THREADS 8
+#define NUMBER_OF_THREADS 2
 #define MAX_RANDOM_NUMBER -137
 #define MIN_RANDOM_NUMBER  137
 #define STUCK_COUNT_FOR_RESET 1000000
@@ -41,13 +42,13 @@ static FUNCTION_NUMBER_TYPE bestResults[RESULT_LENGTH];
 static float bestOffset = 1000000;
 
 template<typename T, uint32_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
-void getLeastOffset(const T(&parameters)[P_SIZE][R_SIZE], 
-					const T(&expectedResults)[R_SIZE], 
+void getLeastOffset(const std::array<std::array<T, R_SIZE>, P_SIZE>& parameters, 
+					const std::array<T, R_SIZE>& expectedResults, 
 					OneDataPerCacheLine<FunctionData> &functionData,
-					const T(&reciprocalExpectedResults)[R_SIZE],
-					const T(&reciprocalParameters)[P_SIZE][R_SIZE])
+					const std::array<T, R_SIZE>& reciprocalExpectedResults,
+					const std::array<std::array<T, R_SIZE>, P_SIZE>& reciprocalParameters)
 {
-	T results[R_SIZE] = { 0 };
+	std::array<T, R_SIZE> results = {0};
 
 	//_MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
@@ -100,9 +101,9 @@ int main()
 	std::cout << std::fixed;
 	std::cout.precision(2);
 
-	const FUNCTION_NUMBER_TYPE parameters[DIFFERENT_PARAMETERS_COUNT][RESULT_LENGTH] = PARAMETERS_VALUE;
-	const FUNCTION_NUMBER_TYPE expectedResults[RESULT_LENGTH] = EXPECTED_RESULT_VALUE;
-	const MathOperator allowedOps[ALLOWED_OPS_LENGTH] = 
+	const std::array<std::array<FUNCTION_NUMBER_TYPE, RESULT_LENGTH>, DIFFERENT_PARAMETERS_COUNT>parameters = PARAMETERS_VALUE;
+	const std::array<FUNCTION_NUMBER_TYPE, RESULT_LENGTH> expectedResults = EXPECTED_RESULT_VALUE;
+	const std::array<MathOperator, ALLOWED_OPS_LENGTH> allowedOps = 
 	{ 
 		PLUS_PARAMETER,
 		PLUS_RANDOM_NUMBER,
@@ -119,13 +120,13 @@ int main()
 		/*POW, ROOT*/
 	};
 
-	float reciprocalExpectedResults[RESULT_LENGTH];
+	std::array <float, RESULT_LENGTH> reciprocalExpectedResults;
 	for (int32_t i = 0; i < RESULT_LENGTH; i++)
 	{
 		reciprocalExpectedResults[i] = 1 / expectedResults[i];
 	}
 
-	float reciprocalParameters[DIFFERENT_PARAMETERS_COUNT][RESULT_LENGTH];
+	std::array<std::array<float, RESULT_LENGTH>, DIFFERENT_PARAMETERS_COUNT> reciprocalParameters;
 	for (int32_t i = 0; i < DIFFERENT_PARAMETERS_COUNT; i++)
 	{
 		for (int32_t y = 0; y < RESULT_LENGTH; y++)
@@ -137,8 +138,8 @@ int main()
 	const int32_t threadCount = NUMBER_OF_THREADS;
 	//const int32_t threadCount = 1;
 
-	std::thread threads[threadCount];
-	OneDataPerCacheLine<FunctionData> functionData[threadCount] = { 0 };
+	std::array<std::thread, threadCount> threads;
+	std::array<OneDataPerCacheLine<FunctionData>, threadCount> functionData = { 0 };
 
 	MathFunction<FUNCTION_NUMBER_TYPE, FUNCTION_LENGTH, ALLOWED_OPS_LENGTH, RESULT_LENGTH, DIFFERENT_PARAMETERS_COUNT>::setMathFunctionSettings(allowedOps, MIN_RANDOM_NUMBER, MAX_RANDOM_NUMBER);
 	for (int32_t i = 0; i < threadCount; i++)

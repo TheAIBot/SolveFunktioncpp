@@ -1,9 +1,10 @@
 #include <cstdint>
 #include <cmath>
+#include <array>
 
 
 template<typename T, int32_t N>
-inline void calculatePlus(T(&results)[N], const T randomNumber)
+inline void calculatePlus(std::array<T, N>& results, const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -11,7 +12,7 @@ inline void calculatePlus(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculatePlus(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline void calculatePlus(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -20,7 +21,7 @@ inline void calculatePlus(const T(& __restrict parameters)[N], T(& __restrict re
 }
 
 template<typename T, int32_t N>
-inline void calculateMinus(T(&results)[N], const T randomNumber)
+inline void calculateMinus(std::array<T, N>& results, const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -28,7 +29,7 @@ inline void calculateMinus(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMinusReversed(T(&results)[N], const T randomNumber)
+inline void calculateMinusReversed(std::array<T, N>& results, const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -36,7 +37,7 @@ inline void calculateMinusReversed(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMinus(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline void calculateMinus(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -44,7 +45,7 @@ inline void calculateMinus(const T(& __restrict parameters)[N], T(& __restrict r
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMinusReversed(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline void calculateMinusReversed(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -53,7 +54,7 @@ inline void calculateMinusReversed(const T(& __restrict parameters)[N], T(& __re
 }
 
 template<typename T, int32_t N>
-inline void calculateMultiply(T(&results)[N], const T randomNumber)
+inline void calculateMultiply(std::array<T, N>& results, const T randomNumber)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -61,7 +62,7 @@ inline void calculateMultiply(T(&results)[N], const T randomNumber)
 	}
 }
 template<typename T, int32_t N>
-inline void calculateMultiply(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline void calculateMultiply(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -70,7 +71,7 @@ inline void calculateMultiply(const T(& __restrict parameters)[N], T(& __restric
 }
 
 template<typename T, int32_t N>
-inline bool calculateDivide(T(&results)[N], const T randomNumber)
+inline bool calculateDivide(std::array<T, N>& results, const T randomNumber)
 {
 	//make sure to not divide by 0
 	for (int32_t i = 0; i < N; i++)
@@ -88,7 +89,7 @@ inline bool calculateDivide(T(&results)[N], const T randomNumber)
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivideReversed(T(&results)[N], const T randomNumber)
+inline bool calculateDivideReversed(std::array<T, N>& results, const T randomNumber)
 {
 	if (randomNumber == 0)
 	{
@@ -101,7 +102,7 @@ inline bool calculateDivideReversed(T(&results)[N], const T randomNumber)
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivide(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline bool calculateDivide(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	//make sure to not divide by 0
 	for (int32_t i = 0; i < N; i++)
@@ -119,7 +120,7 @@ inline bool calculateDivide(const T(& __restrict parameters)[N], T(& __restrict 
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivideReversed(const T(& __restrict parameters)[N], T(& __restrict results)[N])
+inline bool calculateDivideReversed(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -128,7 +129,7 @@ inline bool calculateDivideReversed(const T(& __restrict parameters)[N], T(& __r
 	return true;
 }
 template<typename T, int32_t N>
-inline bool calculateDivideReversedReciprocal(const T(&__restrict reciprocalParameters)[N], T(&__restrict results)[N])
+inline bool calculateDivideReversedReciprocal(const std::array<T, N>& reciprocalParameters, std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -139,11 +140,11 @@ inline bool calculateDivideReversedReciprocal(const T(&__restrict reciprocalPara
 
 
 template<typename T, int32_t N>
-void calculatePow(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculatePow(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 template<int32_t N>
-void calculatePow(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculatePow(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -183,11 +184,11 @@ void calculatePow(const float(&parameters)[N], float(&results)[N], const float r
 
 
 template<typename T, int32_t N>
-void calculateRoot(T(&results)[N])
+void calculateRoot(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateRoot(float(&results)[N])
+void calculateRoot(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -197,11 +198,11 @@ void calculateRoot(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateExp(T(&results)[N])
+void calculateExp(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateExp(float(&results)[N])
+void calculateExp(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -211,11 +212,11 @@ void calculateExp(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateNLog(T(&results)[N])
+void calculateNLog(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateNLog(float(&results)[N])
+void calculateNLog(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -225,11 +226,11 @@ void calculateNLog(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateLog(T(&results)[N])
+void calculateLog(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateLog(float(&results)[N])
+void calculateLog(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -239,7 +240,7 @@ void calculateLog(float(&results)[N])
 
 
 template<int32_t N>
-void calculateMod(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateMod(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -277,7 +278,7 @@ void calculateMod(const float(&parameters)[N], float(&results)[N], const float r
 	}
 }
 template<typename T, int32_t N>
-void calculateMod(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateMod(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -317,11 +318,11 @@ void calculateMod(const T(&parameters)[N], T(&results)[N], const T randomNumber,
 
 
 template<typename T, int32_t N>
-void calculateFloor(T(&results)[N])
+void calculateFloor(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateFloor(float(&results)[N])
+void calculateFloor(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -331,11 +332,11 @@ void calculateFloor(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateCeil(T(&results)[N])
+void calculateCeil(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateCeil(float(&results)[N])
+void calculateCeil(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -345,11 +346,11 @@ void calculateCeil(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateRound(T(&results)[N])
+void calculateRound(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateRound(float(&results)[N])
+void calculateRound(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -359,11 +360,11 @@ void calculateRound(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateSin(T(&results)[N])
+void calculateSin(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateSin(float(&results)[N])
+void calculateSin(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -373,11 +374,11 @@ void calculateSin(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateCos(T(&results)[N])
+void calculateCos(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateCos(float(&results)[N])
+void calculateCos(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -387,11 +388,11 @@ void calculateCos(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateTan(T(&results)[N])
+void calculateTan(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateTan(float(&results)[N])
+void calculateTan(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -401,11 +402,11 @@ void calculateTan(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateASin(T(&results)[N])
+void calculateASin(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateASin(float(&results)[N])
+void calculateASin(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -415,11 +416,11 @@ void calculateASin(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateACos(T(&results)[N])
+void calculateACos(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateACos(float(&results)[N])
+void calculateACos(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -429,11 +430,11 @@ void calculateACos(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateATan(T(&results)[N])
+void calculateATan(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateATan(float(&results)[N])
+void calculateATan(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -444,11 +445,11 @@ void calculateATan(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateAbs(T(&results)[N])
+void calculateAbs(std::array<T, N>& results)
 {
 }
 template<int32_t N>
-void calculateAbs(float(&results)[N])
+void calculateAbs(std::array<float, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -458,7 +459,7 @@ void calculateAbs(float(&results)[N])
 
 
 template<typename T, int32_t N>
-void calculateAND(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateAND(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -496,13 +497,13 @@ void calculateAND(const T(&parameters)[N], T(&results)[N], const T randomNumber,
 	}
 }
 template<int32_t N>
-void calculateAND(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateAND(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 
 template<typename T, int32_t N>
-void calculateNAND(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateNAND(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -540,13 +541,13 @@ void calculateNAND(const T(&parameters)[N], T(&results)[N], const T randomNumber
 	}
 }
 template<int32_t N>
-void calculateNAND(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateNAND(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 
 template<typename T, int32_t N>
-void calculateOR(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateOR(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -584,13 +585,13 @@ void calculateOR(const T(&parameters)[N], T(&results)[N], const T randomNumber, 
 	}
 }
 template<int32_t N>
-void calculateOR(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateOR(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 
 template<typename T, int32_t N>
-void calculateNOR(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateNOR(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -628,13 +629,13 @@ void calculateNOR(const T(&parameters)[N], T(&results)[N], const T randomNumber,
 	}
 }
 template<int32_t N>
-void calculateNOR(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateNOR(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 
 template<typename T, int32_t N>
-void calculateXOR(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateXOR(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -672,13 +673,13 @@ void calculateXOR(const T(&parameters)[N], T(&results)[N], const T randomNumber,
 	}
 }
 template<int32_t N>
-void calculateXOR(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateXOR(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 
 template<typename T, int32_t N>
-void calculateXNOR(const T(&parameters)[N], T(&results)[N], const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateXNOR(const std::array<T, N>& parameters, std::array<T, N>& results, const T randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 	if (useRandomNumber)
 	{
@@ -716,12 +717,12 @@ void calculateXNOR(const T(&parameters)[N], T(&results)[N], const T randomNumber
 	}
 }
 template<int32_t N>
-void calculateXNOR(const float(&parameters)[N], float(&results)[N], const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
+void calculateXNOR(const std::array<float, N>& parameters, std::array<float, N>& results, const float randomNumber, const bool useRandomNumber, const bool resultOnRight)
 {
 }
 
 template<typename T, int32_t N>
-void calculateNot(T(&results)[N])
+void calculateNot(std::array<T, N>& results)
 {
 	for (int32_t i = 0; i < N; i++)
 	{
@@ -729,6 +730,6 @@ void calculateNot(T(&results)[N])
 	}
 }
 template<int32_t N>
-void calculateNot(float(&results)[N])
+void calculateNot(std::array<float, N>& results)
 {
 }

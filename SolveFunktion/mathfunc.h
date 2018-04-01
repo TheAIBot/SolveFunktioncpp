@@ -71,7 +71,7 @@ public:
 		tcRandom = FRandom::getTCRandom();
 	}
 
-	static void setMathFunctionSettings(const MathOperator(&allowedOps)[O_SIZE], const int32_t minNumber, const int32_t maxNumber)
+	static void setMathFunctionSettings(const std::array<MathOperator, O_SIZE>& allowedOps, const int32_t minNumber, const int32_t maxNumber)
 	{
 		std::copy(std::begin(allowedOps), std::end(allowedOps), std::begin(allowedOperators));
 		minRandomNumber = minNumber;
@@ -108,7 +108,11 @@ public:
 		startOperatorIndex = 0;
 	}
 
-	bool calculate(const T(&parameters)[P_SIZE][R_SIZE], T(&results)[R_SIZE], const T(&expectedResults)[R_SIZE], const T(&reciprocalExpectedResults)[R_SIZE], const T(&reciprocalParameters)[P_SIZE][R_SIZE])
+	bool calculate(const std::array<std::array<T, R_SIZE>, P_SIZE> & parameters, 
+				   std::array<T, R_SIZE>& results, 
+				   const std::array<T, R_SIZE>& expectedResults, 
+				   const std::array<T, R_SIZE>& reciprocalExpectedResults, 
+				   const std::array<std::array<T, R_SIZE>, P_SIZE>& reciprocalParameters)
 	{
 		std::copy(std::begin(parameters[0]), std::end(parameters[0]), std::begin(results));
 
