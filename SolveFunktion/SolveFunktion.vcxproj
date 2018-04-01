@@ -22,7 +22,7 @@
     <ProjectGuid>{70F48A25-9D90-4F6A-9953-F1ABD9D02EC4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SolveFunktion</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -160,6 +160,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Klasser\FastRandom\tsrandom.h" />
     <ClInclude Include="arrAvg.h" />
     <ClInclude Include="cacheAlignedTypes.h" />
     <ClInclude Include="mathfunc.h" />
@@ -167,13 +168,9 @@
     <ClInclude Include="threadSharedResources.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Klasser\FastRandom\tsrandom.cpp" />
     <ClCompile Include="omath.cpp" />
     <ClCompile Include="SolveFunktion.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Klasser\FastRandom\FastRandom.vcxproj">
-      <Project>{4852c6ad-9498-4efe-b942-29fb4af7da38}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

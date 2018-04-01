@@ -1,6 +1,7 @@
 #pragma once
 
 #include "tsrandom.h"
+#include <array>
 
 
 enum MathOperator : uint8_t
@@ -272,15 +273,15 @@ public:
 private:
 	static int32_t minRandomNumber;
 	static int32_t maxRandomNumber;
-	static MathOperator allowedOperators[O_SIZE];
+	static std::array<MathOperator, O_SIZE> allowedOperators;
 
 	struct FRandom::TCRandom tcRandom;
-	T randomNumber[F_SIZE];
 	int8_t operatorCount = 0;
 	int8_t startOperatorIndex = 0;
-	MathOperator operatorType[F_SIZE];
-	uint8_t metaData[F_SIZE];
-	int8_t nextOperatorIndex[F_SIZE];
+	std::array<T, F_SIZE> randomNumber;
+	std::array<MathOperator, F_SIZE> operatorType;
+	std::array<uint8_t, F_SIZE> metaData;
+	std::array<int8_t, F_SIZE> nextOperatorIndex;
 
 
 	inline int32_t getParameterIndex(const int32_t index)
@@ -417,4 +418,4 @@ template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t 
 int32_t MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::maxRandomNumber;
 
 template<typename T, uint8_t F_SIZE, uint32_t O_SIZE, uint32_t R_SIZE, uint32_t P_SIZE>
-MathOperator MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::allowedOperators[O_SIZE];
+std::array<MathOperator, O_SIZE> MathFunction<T, F_SIZE, O_SIZE, R_SIZE, P_SIZE>::allowedOperators;

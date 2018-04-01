@@ -1,18 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SolveFunktion", "SolveFunktion\SolveFunktion.vcxproj", "{70F48A25-9D90-4F6A-9953-F1ABD9D02EC4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F2528A7-A736-43C6-A595-FDE81AB9F298}"
-	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastRandom", "..\..\Klasser\FastRandom\FastRandom.vcxproj", "{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestFastRandom", "..\..\Klasser\FastRandom\TestFastRandom\TestFastRandom.vcxproj", "{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,26 +21,12 @@ Global
 		{70F48A25-9D90-4F6A-9953-F1ABD9D02EC4}.Release|x64.Build.0 = Release|x64
 		{70F48A25-9D90-4F6A-9953-F1ABD9D02EC4}.Release|x86.ActiveCfg = Release|Win32
 		{70F48A25-9D90-4F6A-9953-F1ABD9D02EC4}.Release|x86.Build.0 = Release|Win32
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Debug|x64.ActiveCfg = Debug|x64
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Debug|x64.Build.0 = Debug|x64
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Debug|x86.ActiveCfg = Debug|Win32
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Debug|x86.Build.0 = Debug|Win32
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Release|x64.ActiveCfg = Release|x64
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Release|x64.Build.0 = Release|x64
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Release|x64.Deploy.0 = Release|x64
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Release|x86.ActiveCfg = Release|Win32
-		{4852C6AD-9498-4EFE-B942-29FB4AF7DA38}.Release|x86.Build.0 = Release|Win32
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Debug|x64.ActiveCfg = Debug|x64
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Debug|x64.Build.0 = Debug|x64
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Debug|x86.ActiveCfg = Debug|Win32
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Debug|x86.Build.0 = Debug|Win32
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Release|x64.ActiveCfg = Release|x64
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Release|x64.Build.0 = Release|x64
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Release|x86.ActiveCfg = Release|Win32
-		{4C03BE77-C12D-4BA5-93B8-71DDB2EDDE80}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8707CDC1-1496-4B7F-AA19-AB6A435BA28C}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

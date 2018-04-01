@@ -33,12 +33,18 @@
     <ClInclude Include="threadSharedResources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Klasser\FastRandom\tsrandom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SolveFunktion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="omath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Klasser\FastRandom\tsrandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
