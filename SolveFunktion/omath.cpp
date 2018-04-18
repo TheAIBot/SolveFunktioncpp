@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <cmath>
 #include <array>
+#include <algorithm>
 
 
 template<typename T, int32_t N>
@@ -74,12 +75,9 @@ template<typename T, int32_t N>
 inline bool calculateDivide(std::array<T, N>& results, const T randomNumber)
 {
 	//make sure to not divide by 0
-	for (int32_t i = 0; i < N; i++)
+	if (std::any_of(results.cbegin(), results.cend(), [](T i) {return i == 0;}))
 	{
-		if (results[i] == 0)
-		{
-			return false;
-		}
+		return false;
 	}
 
 	for (int32_t i = 0; i < N; i++)
@@ -105,12 +103,9 @@ template<typename T, int32_t N>
 inline bool calculateDivide(const std::array<T, N>& parameters, std::array<T, N>& results)
 {
 	//make sure to not divide by 0
-	for (int32_t i = 0; i < N; i++)
+	if (std::any_of(results.cbegin(), results.cend(), [](T i) {return i == 0;}))
 	{
-		if (results[i] == 0)
-		{
-			return false;
-		}
+		return false;
 	}
 
 	for (int32_t i = 0; i < N; i++)

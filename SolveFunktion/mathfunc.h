@@ -2,6 +2,8 @@
 
 #include "tsrandom.h"
 #include <array>
+#include <algorithm>
+#include <stdexcept>
 
 
 enum MathOperator : uint8_t
@@ -84,7 +86,7 @@ public:
 		{
 			randomNumber[i] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		}
-		std::fill(metaData.begin(), metaData.end(), 0);
+		metaData.fill(0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
 			const uint8_t parameterIndex = static_cast<uint8_t>(FRandom::randomRange(0, P_SIZE - 1, tcRandom));
@@ -313,13 +315,13 @@ private:
 
 	inline int32_t getIndexToNumber(const int numberToFind)
 	{
-		int32_t index = 0;
-		while (nextOperatorIndex[index] != numberToFind)
+		auto position = std::find(nextOperatorIndex.begin(), nextOperatorIndex.end(), numberToFind);
+		if (position == nextOperatorIndex.end())
 		{
-			index++;
+			throw std::runtime_error("failed to find the value");
 		}
 
-		return index;
+		return position - nextOperatorIndex.begin();
 	}
 
 	inline bool canRemoveOperator()
