@@ -68,7 +68,7 @@ public:
 
 	static void setMathFunctionSettings(const std::array<MathOperator, O_SIZE>& allowedOps, const int32_t minNumber, const int32_t maxNumber)
 	{
-		std::copy(std::begin(allowedOps), std::end(allowedOps), std::begin(allowedOperators));
+		allowedOperators = allowedOps;
 		minRandomNumber = minNumber;
 		maxRandomNumber = maxNumber;
 	}
@@ -84,7 +84,7 @@ public:
 		{
 			randomNumber[i] = static_cast<T>(FRandom::randomRange(minRandomNumber, maxRandomNumber, tcRandom));
 		}
-		std::fill(std::begin(metaData), std::end(metaData), 0);
+		std::fill(metaData.begin(), metaData.end(), 0);
 		for (int32_t i = 0; i < functionLength; i++)
 		{
 			const uint8_t parameterIndex = static_cast<uint8_t>(FRandom::randomRange(0, P_SIZE - 1, tcRandom));
@@ -386,7 +386,7 @@ private:
 		
 		//now make insertionsPlace point to index and index point to whatever insertionsPlace was pointing at
 		nextOperatorIndex[index] = nextOperatorIndex[insertionsPlace];
-		nextOperatorIndex[insertionsPlace] = index;
+		nextOperatorIndex[insertionsPlace] = static_cast<int8_t>(index);
 
 		operatorCount++;
 	}
