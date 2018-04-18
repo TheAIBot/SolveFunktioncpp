@@ -190,7 +190,7 @@ int main()
 		
 		lockUpdating.lock();
         auto timeSpan = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime);
-        const int32_t passedTime = timeSpan.count();
+        const int64_t passedTime = timeSpan.count();
 		const int64_t correctedTimes = totalTimesDiff - static_cast<int64_t>(static_cast<float>(totalTimesDiff) * (1 - (static_cast<float>(passedTime) / 1000)));
         
 		const int64_t averageTimes = averageSec.insert(correctedTimes);
